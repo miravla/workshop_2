@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Guard Application</string>
+    <string name="parking_lots_occupancy_status">Parking Lots Occupancy Status</string>
+    <string name="total_parking_available">Total Parking Available :</string>
+    <string name="number_of_occupied_lots">Number of Occupied Lots</string>
+    <string name="button">Check Detail</string>
+    <string name="number_of_illegal_parking">Number of Illegal Parking</string>
+    <string name="name">Name</string>
+    <string name="profile">Profile</string>
+    <string name="id">ID</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="welcome">Welcome !</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="login">LOGIN</string>
+    <string name="welcome_utem">Welcome to UTeM IoT Parking System !</string>
+    <string name="password">Password</string>
+    <string name="illegal_parking_detect">Illegal Parking DETECT !</string>
+    <string name="lots_id">Lots ID</string>
+    <string name="time">Time</string>
+</resources>
