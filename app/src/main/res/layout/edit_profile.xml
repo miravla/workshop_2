@@ -20,15 +20,16 @@
         app:layout_constraintVertical_bias="0.208" />
 
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="407dp"
         android:layout_height="191dp"
-        android:layout_marginBottom="324dp"
         android:background="@drawable/round_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.396">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -61,7 +62,7 @@
         android:id="@+id/txtID"
         android:layout_width="192dp"
         android:layout_height="38dp"
-
+        android:labelFor="@id/txtID"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.802"
@@ -75,6 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/id"
+
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,6 +90,7 @@
         android:layout_width="192dp"
         android:layout_height="47dp"
         android:textSize="24sp"
+        android:labelFor="@id/txtPhoneNum"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.803"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -111,7 +114,8 @@
         android:id="@+id/renewButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Renew"
+        android:text="@string/renew"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

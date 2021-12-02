@@ -14,7 +14,6 @@
         android:text="@string/welcome"
         android:textColor="@color/white"
         android:textSize="34sp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
@@ -37,20 +36,19 @@
             android:id="@+id/illegalImage"
             android:layout_width="81dp"
             android:layout_height="66dp"
-            android:onClick="illegalParking"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.167"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.086"
-            app:srcCompat="@drawable/attention" />
+            app:srcCompat="@drawable/car" />
 
         <TextView
             android:id="@+id/illegalText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/illegal_parking"
+            android:text="Check Occupancy"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.171"
@@ -62,7 +60,6 @@
             android:id="@+id/profileImage"
             android:layout_width="84dp"
             android:layout_height="77dp"
-            android:onClick="Profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.821"
@@ -75,38 +72,13 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/profile"
+            android:text="Parking"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.801"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.411" />
-
-        <ImageView
-            android:id="@+id/checkOccupancyImage"
-            android:layout_width="85dp"
-            android:layout_height="67dp"
-            android:onClick="Check"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.169"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.743"
-            app:srcCompat="@drawable/car" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/check_occupancy"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.156"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.93" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,10 +89,10 @@
         android:text="@string/logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.707" />
+        app:layout_constraintVertical_bias="0.727" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,4 +17,11 @@
     <string name="illegal_parking_detect">Illegal Parking DETECT !</string>
     <string name="lots_id">Lots ID</string>
     <string name="time">Time</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="renew">Renew</string>
+    <string name="logout">Logout</string>
+    <string name="illegal_parking">Illegal Parking</string>
+    <string name="profile">Profile</string>
+    <string name="check_occupancy">Check Occupancy</string>
+    <string name="parking_lots_detected">Parking Lots Detected !</string>
 </resources>
