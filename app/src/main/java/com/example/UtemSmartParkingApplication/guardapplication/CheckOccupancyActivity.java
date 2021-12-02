@@ -1,4 +1,4 @@
-package com.example.UtemSmartParkingApplication.guardapplication;;
+package com.example.UtemSmartParkingApplication.guardapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,14 +26,7 @@ public class CheckOccupancyActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }});
-        Button btn2 = (Button) findViewById(R.id.checkIllegalBtn);
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CheckOccupancyActivity.this, IllegalParkingActivity.class);
-                startActivity(intent);
 
-            }});
 
         }
     }

@@ -33,7 +33,7 @@
         app:layout_constraintVertical_bias="0.397">
 
         <ImageView
-            android:id="@+id/illegalImage"
+            android:id="@+id/CheckImage"
             android:layout_width="81dp"
             android:layout_height="66dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -48,7 +48,7 @@
             android:id="@+id/illegalText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Check Occupancy"
+            android:text="@string/check_occupancy"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.171"

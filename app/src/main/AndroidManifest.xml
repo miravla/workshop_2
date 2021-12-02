@@ -26,6 +26,15 @@
             android:name=".guardapplication.GuardProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".clientApplication.ClientHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".clientApplication.ClientProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".clientApplication.ClientCheckOccupancyActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.UtemSmartParkingApplication.MainActivity"
             android:exported="true">
             <intent-filter>
