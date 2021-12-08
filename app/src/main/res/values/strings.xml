@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Guard Application</string>
+    <string name="app_name">UTeM Smart Parking System</string>
     <string name="parking_lots_occupancy_status">Parking Lots Occupancy Status</string>
     <string name="total_parking_available">Total Parking Available :</string>
     <string name="number_of_occupied_lots">Number of Occupied Lots</string>
@@ -23,5 +23,6 @@
     <string name="illegal_parking">Illegal Parking</string>
     <string name="check_occupancy">Check Occupancy</string>
     <string name="parking_lots_detected">Parking Lots Detected !</string>
+    <string name="parking">Parking</string>
 
 </resources>
