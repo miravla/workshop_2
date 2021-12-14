@@ -75,38 +75,38 @@
 
     <Button
         android:id="@+id/BtnOn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Turn On"
-        tools:layout_editor_absoluteX="154dp"
-        tools:layout_editor_absoluteY="492dp"
-        tools:ignore="MissingConstraints" />
+        android:layout_width="172dp"
+        android:layout_height="55dp"
+        android:text="@string/turn_on"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="492dp" />
 
     <Button
         android:id="@+id/BtnOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Turn Off"
+        android:layout_width="172dp"
+        android:layout_height="55dp"
+        android:text="@string/turn_off"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="151dp"
-        tools:layout_editor_absoluteY="552dp" />
+        tools:layout_editor_absoluteX="221dp"
+        tools:layout_editor_absoluteY="492dp" />
 
     <Button
         android:id="@+id/discover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Discoverable"
+        android:layout_width="172dp"
+        android:layout_height="55dp"
+        android:text="@string/discoverable"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="131dp"
-        tools:layout_editor_absoluteY="612dp" />
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="569dp" />
 
     <Button
         android:id="@+id/pairedDevices"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Paired Devices"
+        android:layout_width="172dp"
+        android:layout_height="55dp"
+        android:text="@string/get_paired_devices"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="109dp"
-        tools:layout_editor_absoluteY="672dp" />
+        tools:layout_editor_absoluteX="221dp"
+        tools:layout_editor_absoluteY="569dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

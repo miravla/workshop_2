@@ -24,5 +24,9 @@
     <string name="check_occupancy">Check Occupancy</string>
     <string name="parking_lots_detected">Parking Lots Detected !</string>
     <string name="parking">Parking</string>
+    <string name="turn_off">Turn Off</string>
+    <string name="turn_on">Turn On</string>
+    <string name="get_paired_devices">Get Paired Devices</string>
+    <string name="discoverable">Discoverable</string>
 
 </resources>
