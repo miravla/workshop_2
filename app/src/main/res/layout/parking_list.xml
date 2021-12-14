@@ -13,7 +13,7 @@
         android:layout_marginBottom="604dp"
         android:text="@string/parking_lots_detected"
         android:textColor="@color/white"
-        android:textSize="24dp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -36,13 +36,9 @@
             android:layout_height="200dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="34dp">
-        </ListView>
-
+            app:layout_constraintTop_toTopOf="parent"></ListView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -57,11 +53,12 @@
         android:layout_marginBottom="560dp"
         android:text=""
         android:textColor="@color/white"
-        android:textSize="24dp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
+
         android:id="@+id/paired"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,7 +66,7 @@
         android:layout_marginBottom="516dp"
         android:text=""
         android:textColor="@color/white"
-        android:textSize="24dp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -78,35 +75,47 @@
         android:layout_width="172dp"
         android:layout_height="55dp"
         android:text="@string/turn_on"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="492dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.727" />
 
     <Button
         android:id="@+id/BtnOff"
         android:layout_width="172dp"
         android:layout_height="55dp"
         android:text="@string/turn_off"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="221dp"
-        tools:layout_editor_absoluteY="492dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.727" />
 
     <Button
         android:id="@+id/discover"
         android:layout_width="172dp"
         android:layout_height="55dp"
         android:text="@string/discoverable"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="569dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.841" />
 
     <Button
         android:id="@+id/pairedDevices"
         android:layout_width="172dp"
         android:layout_height="55dp"
         android:text="@string/get_paired_devices"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="221dp"
-        tools:layout_editor_absoluteY="569dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.924"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.841" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
