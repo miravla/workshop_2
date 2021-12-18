@@ -10,13 +10,26 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.UtemSmartParkingApplication.ThingsboardConnection.ThingsboardConnection;
 import com.example.UtemSmartParkingApplication.clientApplication.ClientHomeActivity;
 import com.example.UtemSmartParkingApplication.guardapplication.GuardHomeActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.Executors;
+
 public class MainActivity extends AppCompatActivity {
+
 
     private EditText txtEmail,txtPassword;
     private ProgressBar loginProgress;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 //get email and password
                 String email = txtEmail.getText().toString();
                 String password = txtPassword.getText().toString();
+                Executors.newSingleThreadExecutor().execute(this::test);
 
                 //check database
                 //if account available
@@ -64,7 +78,35 @@ public class MainActivity extends AppCompatActivity {
                 //loginProgress.setVisibility(View.INVISIBLE);
 
             }
+
+            private void test() {
+                try {
+                    JSONObject request = new JSONObject();
+                    //username>get username from xml//
+
+                    request.put("username", "lohchunren99@hotmail.com");
+                    //password>get from xml
+                    request.put("password", "abc123");
+                    HttpURLConnection connection = (HttpURLConnection) new URL("https://utemsmartparking.tk:443/api/auth/login").openConnection();
+
+                    connection.setDoInput(true);
+                    connection.setDoOutput(true);
+                    connection.setRequestMethod("POST");
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    int code=connection.getResponseCode();
+                    connection.getOutputStream().write(request.toString().getBytes());
+                    Toast.makeText(MainActivity.this, "Not connect!"+code,
+                            Toast.LENGTH_SHORT).show();
+                    System.out.println(connection.getResponseCode());
+
+                    connection.disconnect();
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         });
     }
+
+
 
 }

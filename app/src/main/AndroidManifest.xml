@@ -5,7 +5,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -39,8 +40,12 @@
             android:name=".clientApplication.ClientCheckOccupancyActivity"
             android:exported="false" />
         <activity
+            android:name=".parking_list"
+            android:exported="false" />
+        <activity
             android:name="com.example.UtemSmartParkingApplication.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
