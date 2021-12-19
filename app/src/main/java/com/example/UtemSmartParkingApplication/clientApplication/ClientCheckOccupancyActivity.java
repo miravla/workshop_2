@@ -1,6 +1,8 @@
 package com.example.UtemSmartParkingApplication.clientApplication;
 
+import android.bluetooth.le.BluetoothLeScanner;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -35,4 +37,5 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-}
+
+    }

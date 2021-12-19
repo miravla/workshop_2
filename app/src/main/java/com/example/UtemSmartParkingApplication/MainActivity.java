@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText txtEmail,txtPassword;
     private ProgressBar loginProgress;
-
+    private int responsecode = 0;
 
 
     @Override
@@ -61,17 +61,18 @@ public class MainActivity extends AppCompatActivity {
                 //check database
                 //if account available
 
-                if(email.equals("admin")&&password.equals("admin")) {
+                if(responsecode == 200) {
                     intent = new Intent(MainActivity.this, GuardHomeActivity.class);
-                    startActivity(intent);
                 }
-                else if(email.equals("client")&&password.equals("client")) {
+                else  {
+                    Toast.makeText(MainActivity.this, "Not connect!"/*+code*/,
+                            Toast.LENGTH_SHORT).show();
                     intent = new Intent(MainActivity.this, ClientHomeActivity.class);
-                    startActivity(intent);
                 }
-                else
+                startActivity(intent);
 
-                    Toast.makeText(MainActivity.this, "Not A Valid Account!",
+
+                Toast.makeText(MainActivity.this, "Not A Valid Account!",
                             Toast.LENGTH_SHORT).show();
                 txtEmail.setEnabled(true);
                 txtPassword.setEnabled(true);
@@ -80,29 +81,33 @@ public class MainActivity extends AppCompatActivity {
             }
 
             private void test() {
+
                 try {
                     JSONObject request = new JSONObject();
                     //username>get username from xml//
 
-                    request.put("username", "lohchunren99@hotmail.com");
+                    request.put("username", txtEmail.getText().toString());
                     //password>get from xml
-                    request.put("password", "abc123");
-                    HttpURLConnection connection = (HttpURLConnection) new URL("https://utemsmartparking.tk:443/api/auth/login").openConnection();
+                    request.put("password", txtPassword.getText().toString());
+                    HttpURLConnection connection = (HttpURLConnection)
+                            new URL("https://utemsmartparking.tk:443/api/auth/login").openConnection();
 
                     connection.setDoInput(true);
                     connection.setDoOutput(true);
                     connection.setRequestMethod("POST");
                     connection.setRequestProperty("Content-Type", "application/json");
-                    int code=connection.getResponseCode();
+                    responsecode = connection.getResponseCode();
                     connection.getOutputStream().write(request.toString().getBytes());
-                    Toast.makeText(MainActivity.this, "Not connect!"+code,
-                            Toast.LENGTH_SHORT).show();
-                    System.out.println(connection.getResponseCode());
-
+                    txtEmail.setEnabled(true);
+                    txtPassword.setEnabled(true);
                     connection.disconnect();
+                   // System.out.println(connection.getResponseCode());
+
+
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         });
     }
