@@ -51,20 +51,11 @@ public class parking_list extends AppCompatActivity {
         offBtn          = findViewById(R.id.BtnOff);
         discoverBtn     = findViewById(R.id.discover);
 
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) {
-            // Device doesn't support Bluetooth
-        }
-
-        if (!bluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, 0);
-        }
 
         //adapter
-//        mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
+       mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
 
-/*
+
         //check if bluetooth is available or not
         if(mBlueAdapter == null) {
            // mStatusBlueTv.setText("Bluetooth is not available");
@@ -88,9 +79,9 @@ public class parking_list extends AppCompatActivity {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent , REQUEST_ENABLE_BT);
         }
-        */
 
-        /*
+
+
 
         //on BT button
         onBtn.setOnClickListener(v -> {
@@ -161,7 +152,7 @@ public class parking_list extends AppCompatActivity {
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
-        */
+
 
     }
 }
