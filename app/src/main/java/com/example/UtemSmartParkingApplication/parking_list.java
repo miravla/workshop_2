@@ -3,8 +3,10 @@ package com.example.UtemSmartParkingApplication;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,6 +33,13 @@ public class parking_list extends AppCompatActivity {
     private void showToast(String hello){
         Toast.makeText(this,hello, Toast.LENGTH_SHORT).show();
     }
+    private BluetoothAdapter bluetoothAdapter;
+    private BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+    private boolean scanning;
+    private Handler handler = new Handler();
+
+    // Stops scanning after 10 seconds.
+    private static final long SCAN_PERIOD = 10000;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +64,12 @@ public class parking_list extends AppCompatActivity {
             mStatusBlueTv.setText("Bluetooth is available");
 
         }
-
+        if(!mBlueAdapter.isEnabled()){
+            showToast("Turning on Bluetooth...");
+            //intent to on BT
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent , REQUEST_ENABLE_BT);
+        }
 
         //on BT button
         onBtn.setOnClickListener(v -> {
