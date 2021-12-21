@@ -57,15 +57,20 @@ public class parking_list extends AppCompatActivity {
 
         //check if bluetooth is available or not
         if(mBlueAdapter == null) {
-            mStatusBlueTv.setText("Bluetooth is not available");
-
+           // mStatusBlueTv.setText("Bluetooth is not available");
+            Toast.makeText(parking_list.this, "Bluetooth is not available",
+                    Toast.LENGTH_SHORT).show();
         }
         else {
-            mStatusBlueTv.setText("Bluetooth is available");
+            Toast.makeText(parking_list.this, "Bluetooth is available",
+                    Toast.LENGTH_SHORT).show();
+           // mStatusBlueTv.setText("Bluetooth is available");
 
         }
         if(!mBlueAdapter.isEnabled()){
-            showToast("Turning on Bluetooth...");
+            Toast.makeText(parking_list.this, "Turning on Bluetooth...",
+                    Toast.LENGTH_SHORT).show();
+            //showToast("Turning on Bluetooth...");
             //intent to on BT
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent , REQUEST_ENABLE_BT);
