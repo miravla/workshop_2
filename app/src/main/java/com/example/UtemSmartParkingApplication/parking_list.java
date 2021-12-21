@@ -60,6 +60,7 @@ public class parking_list extends AppCompatActivity {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, 0);
         }
+
         //adapter
 //        mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
 
