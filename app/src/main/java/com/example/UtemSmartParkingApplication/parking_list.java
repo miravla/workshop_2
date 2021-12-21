@@ -61,12 +61,15 @@ public class parking_list extends AppCompatActivity {
             Toast.makeText(parking_list.this, "Bluetooth is not available",
                     Toast.LENGTH_SHORT).show();
         }
+       /*
         else {
             Toast.makeText(parking_list.this, "Bluetooth is available",
                     Toast.LENGTH_SHORT).show();
            // mStatusBlueTv.setText("Bluetooth is available");
 
         }
+        */
+
         if(!mBlueAdapter.isEnabled()){
             Toast.makeText(parking_list.this, "Turning on Bluetooth...",
                     Toast.LENGTH_SHORT).show();
@@ -75,6 +78,7 @@ public class parking_list extends AppCompatActivity {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent , REQUEST_ENABLE_BT);
         }
+        /*
 
         //on BT button
         onBtn.setOnClickListener(v -> {
@@ -145,5 +149,7 @@ public class parking_list extends AppCompatActivity {
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+        */
+
     }
 }
