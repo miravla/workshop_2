@@ -22,12 +22,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.Executors;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class MainActivity extends AppCompatActivity {
 
 
     private EditText txtEmail,txtPassword;
     private ProgressBar loginProgress;
-    private int responsecode = 0;
+    private int responsecode;
 
 
     @Override
@@ -63,17 +65,19 @@ public class MainActivity extends AppCompatActivity {
 
                 if(responsecode == 200) {
                     intent = new Intent(MainActivity.this, GuardHomeActivity.class);
+                    startActivity(intent);
                 }
                 else  {
-                    Toast.makeText(MainActivity.this, "Not connect!"/*+code*/,
+                    Toast.makeText(MainActivity.this, "Not connect!"+ responsecode,
                             Toast.LENGTH_SHORT).show();
                     intent = new Intent(MainActivity.this, ClientHomeActivity.class);
+                    startActivity(intent);
                 }
-                startActivity(intent);
 
 
-                Toast.makeText(MainActivity.this, "Not A Valid Account!",
-                            Toast.LENGTH_SHORT).show();
+
+                /*Toast.makeText(MainActivity.this, "Not A Valid Account!",
+                            Toast.LENGTH_SHORT).show();*/
                 txtEmail.setEnabled(true);
                 txtPassword.setEnabled(true);
                 //loginProgress.setVisibility(View.INVISIBLE);
@@ -89,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
                     request.put("username", txtEmail.getText().toString());
                     //password>get from xml
                     request.put("password", txtPassword.getText().toString());
-                    HttpURLConnection connection = (HttpURLConnection)
-                            new URL("https://utemsmartparking.tk:443/api/auth/login").openConnection();
+                    HttpsURLConnection connection = (HttpsURLConnection)
+                            new URL("https://utemsmartparking.tk/api/auth/login").openConnection();
 
                     connection.setDoInput(true);
                     connection.setDoOutput(true);
@@ -98,10 +102,9 @@ public class MainActivity extends AppCompatActivity {
                     connection.setRequestProperty("Content-Type", "application/json");
                     responsecode = connection.getResponseCode();
                     connection.getOutputStream().write(request.toString().getBytes());
-                    txtEmail.setEnabled(true);
-                    txtPassword.setEnabled(true);
+
                     connection.disconnect();
-                   // System.out.println(connection.getResponseCode());
+                    System.out.println(connection.getResponseCode());
 
 
                 } catch (IOException | JSONException e) {
