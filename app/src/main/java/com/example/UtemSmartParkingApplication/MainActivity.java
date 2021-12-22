@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
                     //username>get username from xml//
 
                     request.put("username", txtEmail.getText().toString());
+
+
                     //password>get from xml
                     request.put("password", txtPassword.getText().toString());
                     HttpsURLConnection connection = (HttpsURLConnection)
@@ -99,16 +101,20 @@ public class MainActivity extends AppCompatActivity {
                     connection.setDoInput(true);
                     connection.setDoOutput(true);
                     connection.setRequestMethod("POST");
+
                     connection.setRequestProperty("Content-Type", "application/json");
+
+                   // String token = connection.getRequestProperty();
+
                     responsecode = connection.getResponseCode();
                     connection.getOutputStream().write(request.toString().getBytes());
 
                     connection.disconnect();
-                    System.out.println(connection.getResponseCode());
+
 
 
                 } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+                   e.printStackTrace();
                 }
 
             }

@@ -3,10 +3,20 @@ package com.example.UtemSmartParkingApplication.clientApplication;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanResult;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.ParcelUuid;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,10 +24,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import com.example.UtemSmartParkingApplication.R;
 import com.example.UtemSmartParkingApplication.parking_list;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class ClientCheckOccupancyActivity  extends AppCompatActivity {
@@ -31,27 +44,30 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
     BluetoothAdapter mBlueAdapter;
 
     //toast message function
-    private void showToast(String hello){
-        Toast.makeText(this,hello, Toast.LENGTH_SHORT).show();
+    private void showToast(String hello) {
+        Toast.makeText(this, hello, Toast.LENGTH_SHORT).show();
     }
+
     private BluetoothAdapter bluetoothAdapter;
     //private BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
     private boolean scanning;
     private Handler handler = new Handler();
 
+
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
         super.onCreate(savedInstanceState2);
         setContentView(R.layout.parking_list);
 
-        mStatusBlueTv   = findViewById(R.id.status);
-        mPairedTv       = findViewById(R.id.paired);
-        onBtn           = findViewById(R.id.BtnOn);
-        offBtn          = findViewById(R.id.BtnOff);
-        discoverBtn     = findViewById(R.id.discover);
-        pairedButton    =  findViewById(R.id.pairedDevices);
+        mStatusBlueTv = findViewById(R.id.status);
+        mPairedTv = findViewById(R.id.paired);
+        onBtn = findViewById(R.id.BtnOn);
+        offBtn = findViewById(R.id.BtnOff);
+        discoverBtn = findViewById(R.id.discover);
+        pairedButton = findViewById(R.id.pairedDevices);
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
 
@@ -62,48 +78,48 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
 
 
         //check if bluetooth is available or not
-        if(mBlueAdapter == null) {
+        if (mBlueAdapter == null) {
             // mStatusBlueTv.setText("Bluetooth is not available");
             Toast.makeText(ClientCheckOccupancyActivity.this, "Bluetooth is not available",
                     Toast.LENGTH_SHORT).show();
         }
 
 
-        if(!mBlueAdapter.isEnabled()){
+        if (!mBlueAdapter.isEnabled()) {
             Toast.makeText(ClientCheckOccupancyActivity.this, "Turning on Bluetooth...",
                     Toast.LENGTH_SHORT).show();
             //showToast("Turning on Bluetooth...");
             //intent to on BT
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent , REQUEST_ENABLE_BT);
+            startActivityForResult(intent, REQUEST_ENABLE_BT);
         }
 
 
         //TODO:BUTTON TAK MAU
         //on BT button
         onBtn.setOnClickListener(v -> {
-            if(!mBlueAdapter.isEnabled()){
+            if (!mBlueAdapter.isEnabled()) {
                 showToast("Turning on Bluetooth...");
                 //intent to on BT
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(intent , REQUEST_ENABLE_BT);
+                startActivityForResult(intent, REQUEST_ENABLE_BT);
             }
 
         });
 
         //discover BT btn
         discoverBtn.setOnClickListener(v -> {
-            if(!mBlueAdapter.isDiscovering()){
+            if (!mBlueAdapter.isDiscovering()) {
                 showToast("Making your device discoverable");
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-                startActivityForResult(intent , REQUEST_DISCOVER_BT);
+                startActivityForResult(intent, REQUEST_DISCOVER_BT);
             }
         });
 
         //off BT button
         //TODO:CANNOT YET
         offBtn.setOnClickListener(v -> {
-            if(mBlueAdapter.isEnabled()){
+            if (mBlueAdapter.isEnabled()) {
                 mBlueAdapter.disable();
                 showToast("Turning off Bluetooth");
             }
@@ -111,14 +127,16 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
                 showToast("Bluetooth is already off");
             }*/
         });
-
+        //TODO:SCan and get device automatically
+        //Scan strongest signal
         //paired Button
         pairedButton.setOnClickListener(v -> {
-            if(mBlueAdapter.isEnabled()){
+            if (mBlueAdapter.isEnabled()) {
                 mPairedTv.setText("Paired Devices");
+
                 Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
-                for(BluetoothDevice device: devices){
-                    mPairedTv.append("\nDevice : " + device.getName()+ "," + device);
+                for (BluetoothDevice device : devices) {
+                    mPairedTv.append("\nDevice : " + device.getName() + "," + device);
                 }
             }
             /*else{
@@ -128,9 +146,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         });
 
 
-
     }
-
 
 
     // this event will enable the back
@@ -144,6 +160,4 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-    }
+}
