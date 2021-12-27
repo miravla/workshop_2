@@ -1,6 +1,7 @@
 package com.example.UtemSmartParkingApplication.clientApplication;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -25,8 +26,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +61,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
+    ListView listView;
     TextView mStatusBlueTv, mPairedTv;
     Button onBtn, offBtn, discoverBtn, pairedButton;
 
@@ -70,7 +73,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
     }
 
 
-    private BluetoothAdapter bluetoothAdapter;
+    BluetoothAdapter bluetoothAdapter;
     //private BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
     private boolean scanning;
     private Handler handler = new Handler();
@@ -79,6 +82,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
@@ -91,6 +95,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         offBtn = findViewById(R.id.BtnOff);
         discoverBtn = findViewById(R.id.discover);
         pairedButton = findViewById(R.id.pairedDevices);
+        listView=(ListView)findViewById(R.id.LotList);
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
 
@@ -133,6 +138,8 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
                      MY_PERMISSIONS_REQUEST_LOCATION);
                 //startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
+            else
+                showToast("You must turn on your bluetooth to use the service!");
 
         });
 
@@ -162,19 +169,29 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         //paired Button
         pairedButton.setOnClickListener(v -> {
             Intent intent = new Intent(ClientCheckOccupancyActivity.this, test.class);
+            Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
+            String []strings=new String[devices.size()];
+            int index=0;
+            if (devices.size() > 0) {
 
-            /*if (mBlueAdapter.isEnabled()) {
                 mPairedTv.setText("Paired Devices");
 
-                Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
                 for (BluetoothDevice device : devices) {
-                    mPairedTv.append("\nDevice : " + device.getName() + "," + device);
+                    strings [index] = device.getName();
+                    //String deviceHardwareAddress = device.getAddress(); // MAC address
+                    index++;
                 }
+                ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,strings);
+                listView.setAdapter(arrayAdapter);
             }
-            /*else{
+            else if(devices.size() == 0)
+                {
+                    mPairedTv.setText("No Devices");
+                }
+            else {
                 //bluetooth is off so can't get paired devices
-                showToast("Turn on Bluetooth to get paired devices");
-            }*/
+                mPairedTv.setText("No Devices is Detected!");
+            }
         });
 
 
