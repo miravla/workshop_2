@@ -1,5 +1,7 @@
 package com.example.UtemSmartParkingApplication.clientApplication;
 
+import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -8,7 +10,14 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.LocationManager;
+import android.location.LocationRequest;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ParcelUuid;
@@ -21,22 +30,34 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import com.example.UtemSmartParkingApplication.R;
 import com.example.UtemSmartParkingApplication.parking_list;
+import com.example.UtemSmartParkingApplication.test;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
 
 import java.util.ArrayList;
 import java.util.Set;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class ClientCheckOccupancyActivity  extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
-
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     TextView mStatusBlueTv, mPairedTv;
     Button onBtn, offBtn, discoverBtn, pairedButton;
@@ -48,15 +69,17 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         Toast.makeText(this, hello, Toast.LENGTH_SHORT).show();
     }
 
+
     private BluetoothAdapter bluetoothAdapter;
     //private BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
     private boolean scanning;
     private Handler handler = new Handler();
-
-
+    private LocationManager locationAdapter;
+    private String provider;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
         super.onCreate(savedInstanceState2);
@@ -75,8 +98,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         //adapter
         mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
-
-
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //check if bluetooth is available or not
         if (mBlueAdapter == null) {
             // mStatusBlueTv.setText("Bluetooth is not available");
@@ -92,6 +114,9 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
             //intent to on BT
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_ENABLE_BT);
+
+
+
         }
 
 
@@ -103,6 +128,10 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
                 //intent to on BT
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(intent, REQUEST_ENABLE_BT);
+                ActivityCompat.requestPermissions(ClientCheckOccupancyActivity.this,
+                  new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                     MY_PERMISSIONS_REQUEST_LOCATION);
+                //startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
 
         });
@@ -113,6 +142,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
                 showToast("Making your device discoverable");
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
                 startActivityForResult(intent, REQUEST_DISCOVER_BT);
+
             }
         });
 
@@ -131,7 +161,9 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         //Scan strongest signal
         //paired Button
         pairedButton.setOnClickListener(v -> {
-            if (mBlueAdapter.isEnabled()) {
+            Intent intent = new Intent(ClientCheckOccupancyActivity.this, test.class);
+
+            /*if (mBlueAdapter.isEnabled()) {
                 mPairedTv.setText("Paired Devices");
 
                 Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
@@ -160,4 +192,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
 }
