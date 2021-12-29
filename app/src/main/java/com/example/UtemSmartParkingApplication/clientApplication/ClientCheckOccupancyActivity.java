@@ -104,6 +104,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         //adapter
         mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         //check if bluetooth is available or not
         if (mBlueAdapter == null) {
             // mStatusBlueTv.setText("Bluetooth is not available");
@@ -115,8 +116,9 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         if (!mBlueAdapter.isEnabled()) {
             Toast.makeText(ClientCheckOccupancyActivity.this, "Turning on Bluetooth...",
                     Toast.LENGTH_SHORT).show();
-            //showToast("Turning on Bluetooth...");
+
             //intent to on BT
+            //open bluetooth
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_ENABLE_BT);
 
@@ -129,17 +131,21 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         //on BT button
         onBtn.setOnClickListener(v -> {
             if (!mBlueAdapter.isEnabled()) {
-                showToast("Turning on Bluetooth...");
+               showToast("Turning on Bluetooth now");
                 //intent to on BT
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(intent, REQUEST_ENABLE_BT);
-                ActivityCompat.requestPermissions(ClientCheckOccupancyActivity.this,
-                  new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                     MY_PERMISSIONS_REQUEST_LOCATION);
+
+                //check location setting
                 //startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
             else
-                showToast("You must turn on your bluetooth to use the service!");
+                showToast("You had turn on your bluetooth already");
+            //get location permission
+
+            ActivityCompat.requestPermissions(ClientCheckOccupancyActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
 
         });
 
@@ -171,26 +177,33 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
             Intent intent = new Intent(ClientCheckOccupancyActivity.this, test.class);
             Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
             String []strings=new String[devices.size()];
+            String []UUID=new String[devices.size()];
             int index=0;
             if (devices.size() > 0) {
 
-                mPairedTv.setText("Paired Devices");
+                mPairedTv.setText("Devices detected :");
 
                 for (BluetoothDevice device : devices) {
-                    strings [index] = device.getName();
-                    //String deviceHardwareAddress = device.getAddress(); // MAC address
-                    index++;
+
+                        strings[index] = device.getName();
+                        UUID[index] = String.valueOf(device.getUuids());
+
+                        //device.createBond();
+                        // device.setPairingConfirmation();
+                        //String deviceHardwareAddress = device.getAddress(); // MAC address
+                        index++;
+
                 }
+                //get specific name
+               
                 ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,strings);
                 listView.setAdapter(arrayAdapter);
             }
-            else if(devices.size() == 0)
-                {
-                    mPairedTv.setText("No Devices");
-                }
+
             else {
                 //bluetooth is off so can't get paired devices
                 mPairedTv.setText("No Devices is Detected!");
+                showToast("No Devices detected. Please check your location permission and bluetooth status before using the application");
             }
         });
 

@@ -11,8 +11,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.UtemSmartParkingApplication.R;
-import com.example.UtemSmartParkingApplication.guardapplication.EditProfileActivity;
-import com.example.UtemSmartParkingApplication.guardapplication.GuardProfileActivity;
 
 public class ClientProfileActivity extends AppCompatActivity {
 

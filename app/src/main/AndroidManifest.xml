@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,7 +26,7 @@
             android:name=".guardapplication.IllegalParkingActivity"
             android:exported="false" />
         <activity
-            android:name=".guardapplication.EditProfileActivity"
+            android:name=".clientApplication.EditProfileActivity"
             android:exported="false" />
 
         <activity

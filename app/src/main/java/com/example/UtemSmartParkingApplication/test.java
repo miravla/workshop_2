@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 
 public class test extends AppCompatActivity {
-    //private final BroadcastReceiver FoundReceiver = null;
+  /*  //private final BroadcastReceiver FoundReceiver = null;
     protected ArrayList<BluetoothDevice> foundDevices = new ArrayList<BluetoothDevice>();
     private ListView foundDevicesListView;
     private ArrayAdapter<BluetoothDevice> btArrayAdapter;
@@ -31,9 +31,9 @@ public class test extends AppCompatActivity {
     /**
      * Called when the activity is first created.
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+  //  @RequiresApi(api = Build.VERSION_CODES.M)
+   // @Override
+  /*  public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.parking_list);
         final BluetoothAdapter myBlueToothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -116,6 +116,6 @@ public class test extends AppCompatActivity {
         }
     };
 
-
+*/
 }
 
