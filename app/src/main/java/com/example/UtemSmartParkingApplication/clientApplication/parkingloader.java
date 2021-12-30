@@ -44,16 +44,14 @@ public class parkingloader extends AsyncTaskLoader<Bundle> {
 
         try {
             JSONObject request = new JSONObject();
-            String token = null;
-            String access_Token = null;
-            String tokenUrl = "http(s)://host:port/api/v1/" + access_Token + "/attributes";
+            String tokenUrl = "http(s)://host:port/api/v1/" + accessToken + "/attributes";
             // username>get username from xml//
 
-            request.put("username", username);
+            request.put("UserToken", token);
 
 
             //password>get from xml
-            request.put("password", password);
+
             HttpsURLConnection connection = (HttpsURLConnection)
                     new URL(tokenUrl).openConnection();
 
@@ -69,28 +67,11 @@ public class parkingloader extends AsyncTaskLoader<Bundle> {
             {
                 response = new Bundle();
                 JSONObject resp = new JSONObject(new BufferedReader(new InputStreamReader(connection.getInputStream())).lines().collect(Collectors.joining()));
-                token = response.getString("token");
-
-                response.putString("token", resp.getString("token"));
+                //token = response.getString("token");
+                response.putInt("code", 200);
+                //response.putString("token", resp.getString("token"));
             }
 
-            connection.disconnect();
-
-            if (token != null) { //High chance Unneeded
-                connection = (HttpsURLConnection) new URL("https://utemsmartparking.tk/api/tenant/devices?pageSize=1000&page=0").openConnection();
-
-                connection.setRequestProperty("X-Authorization", "Bearer " + token);
-                connection.setRequestProperty("Accept", "application/json");
-
-                if (connection.getResponseCode() == 200) {
-                    JSONObject resp = new JSONObject(new BufferedReader(new InputStreamReader(connection.getInputStream())).lines().collect(Collectors.joining()));
-                    JSONArray data = resp.getJSONArray("data");
-                    int length = data.length();
-
-                    for (int i = 0; i < length; i++)
-                        System.out.println(data.getJSONObject(i));
-                }
-            }
             connection.disconnect();
             //runOnUiThread(this::process);
 

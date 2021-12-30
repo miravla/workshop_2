@@ -10,8 +10,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.UtemSmartParkingApplication.R;
-import com.example.UtemSmartParkingApplication.guardapplication.GuardHomeActivity;
-import com.example.UtemSmartParkingApplication.guardapplication.IllegalParkingActivity;
+
 
 public class ClientHomeActivity extends AppCompatActivity {
 
