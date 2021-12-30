@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
+    <uses-feature android:name="android.software.companion_device_setup"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,22 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GuardApplication"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".guardapplication.GuardHomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".guardapplication.IllegalParkingActivity"
-            android:exported="false" />
+
         <activity
             android:name=".clientApplication.EditProfileActivity"
             android:exported="false" />
 
-        <activity
-            android:name=".guardapplication.CheckOccupancyActivity"
-            android:exported="false" />
-        <activity
-            android:name=".guardapplication.GuardProfileActivity"
-            android:exported="false" />
+
         <activity
             android:name=".clientApplication.ClientHomeActivity"
             android:exported="false" />
