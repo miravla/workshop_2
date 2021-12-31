@@ -140,6 +140,8 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
 
             showToast("Making your device discoverable");
             Intent intent2 = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            startActivityForResult(intent2,REQUEST_DISCOVER_BT);
+
             // Register for broadcasts when a device is discovered.
             IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
             registerReceiver(receiver, filter);
@@ -151,7 +153,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         //Scan strongest signal
         //paired Button
        // pairedButton.setOnClickListener(v -> {
-            scanresult.getDevice();
+
             Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
             String []deviceName=new String[devices.size()];
             String []UUID=new String[devices.size()];
