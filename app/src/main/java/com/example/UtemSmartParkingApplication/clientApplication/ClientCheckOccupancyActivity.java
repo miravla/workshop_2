@@ -55,6 +55,7 @@ import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
@@ -111,7 +112,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         offBtn = findViewById(R.id.BtnOff);
         discoverBtn = findViewById(R.id.discover);
         pairedButton = findViewById(R.id.pairedDevices);
-        listView=(ListView)findViewById(R.id.LotList);
+        listView = (ListView) findViewById(R.id.LotList);
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
 
@@ -140,59 +141,83 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
 
             showToast("Making your device discoverable");
             Intent intent2 = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            startActivityForResult(intent2,REQUEST_DISCOVER_BT);
-
+            startActivityForResult(intent2, REQUEST_DISCOVER_BT);
+/*
             // Register for broadcasts when a device is discovered.
             IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
             registerReceiver(receiver, filter);
 
+
+ */
         }
 
 
         //TODO:SCan and get device automatically
         //Scan strongest signal
         //paired Button
-       // pairedButton.setOnClickListener(v -> {
+        // pairedButton.setOnClickListener(v -> {
 
-            Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
-            String []deviceName=new String[devices.size()];
-            String []UUID=new String[devices.size()];
+        Set<BluetoothDevice> devices = mBlueAdapter.getBondedDevices();
+        String[] deviceName = new String[devices.size()];
+        String[] UUID = new String[devices.size()];
 
-            int index=0;
-            if (devices.size() > 0) {
+        int index = 0;
+        if (devices.size() > 0) {
 
-                mPairedTv.setText("Devices detected :");
+            mPairedTv.setText("Devices detected :");
+            ArrayList<String> list = new ArrayList<String>();
 
-                for (BluetoothDevice device : devices) {
+            for (BluetoothDevice device : devices) {
 
-                    deviceName[index] = device.getName();
-                          int newRssi = scanresult.getRssi();
+                deviceName[index] = device.getName();
+                ParcelUuid[] rssi = device.getUuids();
 
-                        UUID[index] = String.valueOf(newRssi);
-
-                        //device.createBond();
-                        // device.setPairingConfirmation();
-                        //String deviceHardwareAddress = device.getAddress(); // MAC address
-                        index++;
-
+                UUID[index] = String.valueOf(rssi);
+               // list.add(device.getName());
+                if (device.getName().contains("ESP32")) {
+                    list.add(device.getName());
                 }
-                //get specific name
-                if(Arrays.asList(deviceName).contains("ESP32")) {
-                ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,deviceName);
 
-                    listView.setAdapter(arrayAdapter);
-                }
-                //listView.setOnClickListener(View view); {
 
-               // };
+
+
+                index++;
+
+
+                //device.createBond();
+                // device.setPairingConfirmation();
+                //String deviceHardwareAddress = device.getAddress(); // MAC address
+
 
             }
+            //get specific name
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
+
+            listView.setAdapter(arrayAdapter);
+            listView.getSelectedItemPosition();
+        }
+
+
+
+
 
             else {
                 //bluetooth is off so can't get paired devices
                 mPairedTv.setText("No Devices is Detected!");
                 showToast("No Devices detected. Please check your location permission and bluetooth status before using the application");
             }
+           // listView.setOnClickListener(v -> {
+
+            /*    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    BTLE_Device BLEDevice = list.get(position);
+                    int rssi = BLEDevice.getRSSI();
+                    }
+
+*/
+             //   });
+
        // });
 
 
@@ -210,6 +235,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    /*
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -232,6 +258,15 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         // Don't forget to unregister the ACTION_FOUND receiver.
         unregisterReceiver(receiver);
     }
+    public boolean createBond(BluetoothDevice btDevice)
+            throws Exception
+    {
+        Class class1 = Class.forName("android.bluetooth.BluetoothDevice");
+        Method createBondMethod = class1.getMethod("createBond");
+        Boolean returnValue = (Boolean) createBondMethod.invoke(btDevice);
+        return returnValue.booleanValue();
+    }
 
 
+     */
 }
