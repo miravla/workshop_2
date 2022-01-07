@@ -47,9 +47,7 @@ public class parking_list extends AppCompatActivity {
 
         mStatusBlueTv   = findViewById(R.id.status);
         mPairedTv       = findViewById(R.id.paired);
-        onBtn           = findViewById(R.id.BtnOn);
-        offBtn          = findViewById(R.id.BtnOff);
-        discoverBtn     = findViewById(R.id.discover);
+
 
 
         //adapter

@@ -21,7 +21,7 @@ public class ClientHomeActivity extends AppCompatActivity {
         setContentView(R.layout.client_home);
         ImageView check = findViewById(R.id.CheckImage);
         check.setOnClickListener(v -> {
-            Intent intent = new Intent(ClientHomeActivity.this, ClientCheckOccupancyActivity.class);
+            Intent intent = new Intent(ClientHomeActivity.this, BluetoothScanActivity.class);
             startActivity(intent);
         });
         ImageView profile = findViewById(R.id.profileImage);
