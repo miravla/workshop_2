@@ -45,7 +45,7 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
         super.onCreate(savedInstanceState2);
-
+        setContentView(R.layout.parking_list);
 
         mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
