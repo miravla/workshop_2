@@ -99,27 +99,20 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
 
 
         backgroundCallBack=new BackgroundCallBack(this);
-        try {
-            Intent intent=getIntent();
-            bluetooth=new JSONObject(Objects.requireNonNull(intent.getStringExtra("bluetooth")));
-            token=intent.getStringExtra("token");
-            name=intent.getStringExtra("name");
-            interactive="ACTIVE_ACK".equals(bluetooth.getString("status"));
+        Intent intent=getIntent();
+        //  bluetooth=new JSONObject(Objects.requireNonNull(intent.getStringExtra("bluetooth")));
+        //   token=intent.getStringExtra("token");
+        //  name=intent.getStringExtra("name");
+        //  interactive="ACTIVE_ACK".equals(bluetooth.getString("status"));
 
-            ByteBuffer byteB = ByteBuffer.wrap(new byte[16]);
-            UUID uuid=UUID.fromString(bluetooth.getJSONObject("originator").getString("id"));
-            byteB.putLong(uuid.getMostSignificantBits());
-            byteB.putLong(uuid.getLeastSignificantBits());
+        ByteBuffer byteB = ByteBuffer.wrap(new byte[16]);
+        // UUID uuid=UUID.fromString(bluetooth.getJSONObject("originator").getString("id"));
+        //byteB.putLong(uuid.getMostSignificantBits());
+        // byteB.putLong(uuid.getLeastSignificantBits());
 
-            id= Arrays.toString(byteB.array());
-            id=id.substring(1,id.length()-1);
+        //   id= Arrays.toString(byteB.array());
+        //   id=id.substring(1,id.length()-1);
 
-
-        }
-        catch(JSONException a)
-        {
-            a.printStackTrace();
-        }
 
         if(interactive) {
             setContentView(R.layout.parking_list);
