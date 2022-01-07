@@ -36,6 +36,10 @@
             android:name=".clientApplication.ClientCheckOccupancyActivity"
             android:exported="false" />
         <activity
+            android:name=".clientApplication.BluetoothScanActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".parking_list"
             android:exported="false" />
         <activity

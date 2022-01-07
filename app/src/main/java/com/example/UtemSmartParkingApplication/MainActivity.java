@@ -8,6 +8,7 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -91,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         loaderManager = LoaderManager.getInstance(this);
         txtEmail = findViewById(R.id.emailAddressEditText);
         txtPassword = findViewById(R.id.passwordEditText);
+        txtEmail.setHintTextColor(Color.BLACK);
+        txtPassword.setHintTextColor(Color.BLACK);
         // loginProgress = findViewById(R.id.loginProgress);
         //  Button btn = (Button) findViewById(R.id.loginButton);
       /*  btn.setOnClickListener(new View.OnClickListener() {
