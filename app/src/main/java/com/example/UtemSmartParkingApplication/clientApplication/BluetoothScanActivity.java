@@ -1,5 +1,6 @@
 package com.example.UtemSmartParkingApplication.clientApplication;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanRecord;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.UtemSmartParkingApplication.R;
@@ -30,6 +34,7 @@ import java.util.UUID;
 public class BluetoothScanActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener {
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
+    TextView mStatusBlueTv, mPairedTv;
     private JSONObject bluetooth;
     private BluetoothAdapter mBlueAdapter;
     private BluetoothLeScanner scanner;
@@ -38,14 +43,25 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
     private boolean enabled,interactive;
     private long last;
     TextView txtBluetooth;
+
     private void showToast(String hello) {
         Toast.makeText(this, hello, Toast.LENGTH_SHORT).show();
     }
 
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
+        mStatusBlueTv = findViewById(R.id.status);
+        mPairedTv = findViewById(R.id.paired);
         super.onCreate(savedInstanceState2);
         setContentView(R.layout.parking_list);
+
+        // calling the action bar
+        ActionBar actionBar = getSupportActionBar();
+
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
