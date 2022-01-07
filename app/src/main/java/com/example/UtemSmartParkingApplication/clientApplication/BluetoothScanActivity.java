@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +67,16 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
         mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+
+        backgroundCallBack=new BackgroundCallBack(this);
+       // Intent intent=getIntent();
+        //  bluetooth=new JSONObject(Objects.requireNonNull(intent.getStringExtra("bluetooth")));
+        //   token=intent.getStringExtra("token");
+        //  name=intent.getStringExtra("name");
+        //  interactive="ACTIVE_ACK".equals(bluetooth.getString("status"));
+
+        ByteBuffer byteB = ByteBuffer.wrap(new byte[16]);
+
         //check if bluetooth is available or not
         if (mBlueAdapter == null) {
             // mStatusBlueTv.setText("Bluetooth is not available");
@@ -98,14 +109,14 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
         }
 
 
-        backgroundCallBack=new BackgroundCallBack(this);
-        Intent intent=getIntent();
+       // backgroundCallBack=new BackgroundCallBack(this);
+       // Intent intent=getIntent();
         //  bluetooth=new JSONObject(Objects.requireNonNull(intent.getStringExtra("bluetooth")));
         //   token=intent.getStringExtra("token");
         //  name=intent.getStringExtra("name");
         //  interactive="ACTIVE_ACK".equals(bluetooth.getString("status"));
 
-        ByteBuffer byteB = ByteBuffer.wrap(new byte[16]);
+       // ByteBuffer byteB = ByteBuffer.wrap(new byte[16]);
         // UUID uuid=UUID.fromString(bluetooth.getJSONObject("originator").getString("id"));
         //byteB.putLong(uuid.getMostSignificantBits());
         // byteB.putLong(uuid.getLeastSignificantBits());
@@ -205,5 +216,14 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
