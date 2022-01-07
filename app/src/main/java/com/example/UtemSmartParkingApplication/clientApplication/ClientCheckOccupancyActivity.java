@@ -69,7 +69,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
     ListView listView;
     TextView mStatusBlueTv, mPairedTv;
     Button onBtn, offBtn, discoverBtn, pairedButton;
-    ScanResult scanresult;
+    private BluetoothLeScanner scanner;
     BluetoothAdapter mBlueAdapter;
 
     //toast message function
@@ -79,26 +79,14 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
 
 
     BluetoothAdapter bluetoothAdapter;
-    //private BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+    private BackgroundCallBack backgroundCallBack;
     private boolean scanning;
     private Handler handler = new Handler();
     private LocationManager locationAdapter;
     private String provider;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
-    private ScanCallback mLeScanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            super.onScanResult(callbackType, result);
 
-            BluetoothDevice newDevice = result.getDevice();
-
-            int newRssi = result.getRssi();
-            String device_name = newDevice.getName();
-            String device_address = newDevice.getAddress();
-
-        }
-    };
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -127,6 +115,8 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
 
 
         if (!mBlueAdapter.isEnabled()) {
+
+            //if bluetooth not open yet
             Toast.makeText(ClientCheckOccupancyActivity.this, "Turning on Bluetooth...",
                     Toast.LENGTH_SHORT).show();
 
@@ -138,15 +128,15 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
             showToast("Making your device discoverable");
             Intent intent2 = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             startActivityForResult(intent2, REQUEST_DISCOVER_BT);
-/*
-            // Register for broadcasts when a device is discovered.
-            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            registerReceiver(receiver, filter);
 
-
- */
         }
 
+            else
+        {
+            scanner= mBlueAdapter.getBluetoothLeScanner();
+            scanner.startScan(backgroundCallBack);
+        }
+/*
 
         //TODO:SCan and get device automatically
         //Scan strongest signal
@@ -215,6 +205,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
              //   });
 
        // });
+
 
 
     }
