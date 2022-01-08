@@ -1,5 +1,6 @@
 package com.example.UtemSmartParkingApplication.clientApplication;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -14,6 +15,8 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.UtemSmartParkingApplication.R;
 
@@ -28,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
@@ -35,6 +40,7 @@ import java.util.UUID;
 public class BluetoothScanActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener {
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     TextView mStatusBlueTv, mPairedTv;
     private JSONObject bluetooth;
     private BluetoothAdapter mBlueAdapter;
@@ -44,6 +50,7 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
     private boolean enabled,interactive;
     private long last;
     TextView txtBluetooth;
+    ListView listView;
 
     private void showToast(String hello) {
         Toast.makeText(this, hello, Toast.LENGTH_SHORT).show();
@@ -100,6 +107,10 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
             Intent intent2 = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             startActivityForResult(intent2, REQUEST_DISCOVER_BT);
 
+            ActivityCompat.requestPermissions(BluetoothScanActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+
         }
 
         else
@@ -155,10 +166,22 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
         boolean found=false;
         if(record!=null)
         {
-            int rssi=result.getRssi();
+
+
             byte[] data=record.getManufacturerSpecificData(76);
             String UUID=new String(data);
             String name=result.getDevice().getName();
+            int rssi=result.getRssi();
+            Toast.makeText(this, "HIHIHIHI", Toast.LENGTH_SHORT).show();
+            ArrayList<String> list = new ArrayList<String>();
+
+            for(int i=0;i>1000;i++) {
+                list.add(name);
+            }
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
+
+            listView.setAdapter(arrayAdapter);
+
             if(data!=null&&data.length>16)
             {
 

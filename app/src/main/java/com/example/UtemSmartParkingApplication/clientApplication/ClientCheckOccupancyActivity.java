@@ -65,6 +65,7 @@ import java.util.regex.Pattern;
 public class ClientCheckOccupancyActivity  extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
+
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     ListView listView;
     TextView mStatusBlueTv, mPairedTv;
@@ -128,6 +129,12 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
             showToast("Making your device discoverable");
             Intent intent2 = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             startActivityForResult(intent2, REQUEST_DISCOVER_BT);
+
+
+
+
+
+
 
         }
 
@@ -211,6 +218,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
     }
 
 
+
     // this event will enable the back
     // function to the button on press
     @Override
@@ -222,6 +230,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     /*
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
