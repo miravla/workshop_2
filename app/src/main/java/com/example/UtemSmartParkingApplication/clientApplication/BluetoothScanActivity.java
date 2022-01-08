@@ -168,8 +168,8 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
         {
 
 
-            byte[] data=record.getManufacturerSpecificData(76);
-            String UUID=new String(data);
+           // byte[] data=record.getManufacturerSpecificData(76);
+            //String UUID=new String(data);
             String name=result.getDevice().getName();
             int rssi=result.getRssi();
             Toast.makeText(this, "HIHIHIHI", Toast.LENGTH_SHORT).show();
@@ -186,13 +186,15 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
             listView.setAdapter(arrayAdapter);
 
 
- */
+
             if(data!=null&&data.length>16)
             {
 
                 found=Arrays.toString(data).contains(id);
 
             }
+
+             */
         }
         if(interactive)
         {
