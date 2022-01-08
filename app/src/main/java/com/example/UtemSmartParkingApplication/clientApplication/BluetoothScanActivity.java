@@ -69,8 +69,6 @@ public class BluetoothScanActivity extends AppCompatActivity  {
         Toast.makeText(this, hello, Toast.LENGTH_SHORT).show();
     }
 
-    @SuppressLint("SetTextI18n")
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
         mStatusBlueTv = findViewById(R.id.status);
@@ -236,19 +234,27 @@ public class BluetoothScanActivity extends AppCompatActivity  {
         public void onScanResult(int callbackType, ScanResult result)
         {
             super.onScanResult(callbackType, result);
-            Toast.makeText(BluetoothScanActivity.this, "BABI", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BluetoothScanActivity.this, result.getDevice().getName(), Toast.LENGTH_SHORT).show();
             int rssi = result.getRssi();
-
+            String lalal=result.getScanRecord().getDeviceName();
             synchronized (this)
             {
                 if (rssi > maxRssi)
                 {
                     maxRssi = rssi;
-                    BluetoothDevice device = result.getDevice();
 
-                    txtBluetooth.setText(device.getName());
+                    BluetoothDevice device = result.getDevice();
+                    Toast.makeText(BluetoothScanActivity.this, "HAHA"+device.getName(), Toast.LENGTH_SHORT).show();
+
+                    txtBluetooth.setText(lalal);
                 }
             }
+        }
+
+        @Override
+        public void onScanFailed(int errorCode) {
+            super.onScanFailed(errorCode);
+            Toast.makeText(BluetoothScanActivity.this, "GG.COM", Toast.LENGTH_SHORT).show();
         }
     }
     @Override
