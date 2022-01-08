@@ -3,9 +3,12 @@ package com.example.UtemSmartParkingApplication.clientApplication;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +37,7 @@ import org.json.JSONObject;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -43,7 +47,7 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     TextView mStatusBlueTv, mPairedTv;
     private JSONObject bluetooth;
-    private BluetoothAdapter mBlueAdapter;
+    private BluetoothAdapter mBlueAdapter=null;
     private BluetoothLeScanner scanner;
     private BackgroundCallBack backgroundCallBack;
     private String id,token,name;
@@ -113,9 +117,27 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
 
 
         }
+        List<ScanFilter> filters = new ArrayList<>();
+        ScanFilter.Builder scanFilterBuilder = new ScanFilter.Builder();
+        filters.add(scanFilterBuilder.build());
 
+        ScanSettings.Builder settingsBuilder = new ScanSettings.Builder();
+        settingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
+
+        final BluetoothManager btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBlueAdapter=btManager.getAdapter();
             scanner= mBlueAdapter.getBluetoothLeScanner();
-            scanner.startScan(backgroundCallBack);
+
+        if (scanner == null)
+        {
+            Toast.makeText(this, "hahaha", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, "congrats", Toast.LENGTH_SHORT).show();
+           // scanner.startScan(backgroundCallBack);
+        }
+            //scanner = mBlueAdapter.getBluetoothLeScanner();
 
 
 
@@ -152,7 +174,8 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
 
 
 
-    void setScanResult(ScanResult result) throws JSONException {
+    void setScanResult(ScanResult result)
+    {
 
         ScanRecord record=result.getScanRecord();
         long time=System.currentTimeMillis();
@@ -167,7 +190,7 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
             //String UUID=new String(data);
             String name=result.getDevice().getName();
             int rssi=result.getRssi();
-            UUID uuid=UUID.fromString(bluetooth.getJSONObject("originator").getString("id"));
+          //  UUID uuid=UUID.fromString(bluetooth.getJSONObject("originator").getString("id"));
             Toast.makeText(this, "HIHIHIHI", Toast.LENGTH_SHORT).show();
 
             txtBluetooth.setText(name);
