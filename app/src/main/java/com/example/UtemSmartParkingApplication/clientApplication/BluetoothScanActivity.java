@@ -3,8 +3,10 @@ package com.example.UtemSmartParkingApplication.clientApplication;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
@@ -15,14 +17,19 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -31,30 +38,30 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.UtemSmartParkingApplication.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.concurrent.Executors;
 
-public class BluetoothScanActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener {
+import javax.net.ssl.HttpsURLConnection;
+
+public class BluetoothScanActivity extends AppCompatActivity  {
+
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    TextView mStatusBlueTv, mPairedTv;
-    private JSONObject bluetooth;
+    private ActivityResultLauncher<Intent> bluetoothEnabler;
+    TextView mStatusBlueTv, mPairedTv,txtBluetooth;
+    private ProgressBar pgbScan;
+
     private BluetoothAdapter mBlueAdapter=null;
     private BluetoothLeScanner scanner;
-    private BackgroundCallBack backgroundCallBack;
-    private String id,token,name;
-    private boolean enabled,interactive;
-    private long last;
-    TextView txtBluetooth;
-    ListView listView;
+    private BeaconCallback beaconCallback;
+   Button btnScan;
 
     private void showToast(String hello) {
         Toast.makeText(this, hello, Toast.LENGTH_SHORT).show();
@@ -66,6 +73,9 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState2) {
         mStatusBlueTv = findViewById(R.id.status);
         mPairedTv = findViewById(R.id.paired);
+        pgbScan = findViewById(R.id.pgbScan);
+        txtBluetooth = findViewById(R.id.bluetooth);
+        btnScan = findViewById(R.id.btnScan);
         super.onCreate(savedInstanceState2);
         setContentView(R.layout.parking_list);
 
@@ -78,15 +88,6 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
         mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-
-        backgroundCallBack=new BackgroundCallBack(this);
-       // Intent intent=getIntent();
-        //  bluetooth=new JSONObject(Objects.requireNonNull(intent.getStringExtra("bluetooth")));
-        //   token=intent.getStringExtra("token");
-        //  name=intent.getStringExtra("name");
-        //  interactive="ACTIVE_ACK".equals(bluetooth.getString("status"));
-
-        ByteBuffer byteB = ByteBuffer.wrap(new byte[16]);
 
         //check if bluetooth is available or not
         if (mBlueAdapter == null) {
@@ -104,6 +105,8 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
 
             //intent to on BT
             //open bluetooth
+            bluetoothEnabler = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(), this::enable);
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_ENABLE_BT);
 
@@ -114,159 +117,104 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
             ActivityCompat.requestPermissions(BluetoothScanActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_LOCATION);
-
+            btnScan.setOnClickListener(this::scan);
 
         }
-        List<ScanFilter> filters = new ArrayList<>();
-        ScanFilter.Builder scanFilterBuilder = new ScanFilter.Builder();
-        filters.add(scanFilterBuilder.build());
-
-        ScanSettings.Builder settingsBuilder = new ScanSettings.Builder();
-        settingsBuilder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
 
         final BluetoothManager btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBlueAdapter=btManager.getAdapter();
-            scanner= mBlueAdapter.getBluetoothLeScanner();
+        mBlueAdapter = btManager.getAdapter();
+        scanner = mBlueAdapter.getBluetoothLeScanner();
+        beaconCallback = new BeaconCallback();
 
-        if (scanner == null)
-        {
-            Toast.makeText(this, "hahaha", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(this, "congrats", Toast.LENGTH_SHORT).show();
-           // scanner.startScan(backgroundCallBack);
-        }
-            //scanner = mBlueAdapter.getBluetoothLeScanner();
-
-
-
-
-       // backgroundCallBack=new BackgroundCallBack(this);
-       // Intent intent=getIntent();
-        //  bluetooth=new JSONObject(Objects.requireNonNull(intent.getStringExtra("bluetooth")));
-        //   token=intent.getStringExtra("token");
-        //  name=intent.getStringExtra("name");
-        //  interactive="ACTIVE_ACK".equals(bluetooth.getString("status"));
-
-       // ByteBuffer byteB = ByteBuffer.wrap(new byte[16]);
-        // UUID uuid=UUID.fromString(bluetooth.getJSONObject("originator").getString("id"));
-        //byteB.putLong(uuid.getMostSignificantBits());
-        // byteB.putLong(uuid.getLeastSignificantBits());
-
-        //   id= Arrays.toString(byteB.array());
-        //   id=id.substring(1,id.length()-1);
-
-
-        if(interactive) {
-            setContentView(R.layout.parking_list);
-            txtBluetooth = findViewById(R.id.bluetooth);
-            if (savedInstanceState2 !=null)
-            {
-                txtBluetooth.setText(savedInstanceState2.getString("name"));
-            }
-
-        }
 
 
         }
 
 
 
+    private void enable(ActivityResult activityResult)
+    {
+        if (activityResult.getResultCode() == RESULT_OK)
+            scan();
+    }
 
-    void setScanResult(ScanResult result)
+    private void scan(View view)
     {
 
-        ScanRecord record=result.getScanRecord();
-        long time=System.currentTimeMillis();
 
-        boolean found=false;
+        if (!mBlueAdapter.isEnabled())
+            bluetoothEnabler.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+        else
+            scan();
+    }
 
-        if(record!=null)
+    private void scan()
+    {
+        new Handler().postDelayed(this::stop, 30000);
+        scanner.startScan(beaconCallback);
+    }
+
+    private void stop()
+    {
+        Executors.newSingleThreadExecutor().execute(this::send);
+        scanner.stopScan(beaconCallback);
+        pgbScan.setVisibility(View.GONE);
+
+    }
+
+    private void send()
+    {
+        try
         {
+            JSONObject request = new JSONObject();
+            HttpsURLConnection connection = (HttpsURLConnection) new URL(
+                    "https://utemsmartparking.tk/api/v1/" + txtBluetooth.getText()
+                            + "/telemetry").openConnection();
 
+            request.put("user", "Satrya Fajri Pratama");
 
-           // byte[] data=record.getManufacturerSpecificData(76);
-            //String UUID=new String(data);
-            String name=result.getDevice().getName();
-            int rssi=result.getRssi();
-          //  UUID uuid=UUID.fromString(bluetooth.getJSONObject("originator").getString("id"));
-            Toast.makeText(this, "HIHIHIHI", Toast.LENGTH_SHORT).show();
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.getOutputStream().write(request.toString().getBytes());
 
-            txtBluetooth.setText(name);
-
-            //Todo: compare rssi signal
-            /*
-            ArrayList<String> list = new ArrayList<String>();
-
-            for(int i=0;i>1000;i++) {
-                list.add(name);
-            }
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
-
-            listView.setAdapter(arrayAdapter);
-
-
-
-            if(data!=null&&data.length>16)
-            {
-
-                found=Arrays.toString(data).contains(id);
-
-            }
-
-             */
-        }
-        if(interactive)
-        {
-            if(found){
-                last=time;
-                enabled=true;
-            }
+            if (connection.getResponseCode() == 200)
+                System.out.println("Success");
             else
+                System.out.println("Fail");
+
+            connection.disconnect();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private class BeaconCallback extends ScanCallback
+    {
+        private int maxRssi = Integer.MIN_VALUE;
+
+        @Override
+        public void onScanResult(int callbackType, ScanResult result)
+        {
+            int rssi = result.getRssi();
+
+            synchronized (this)
             {
-                if(time-last>60000)
+                if (rssi > maxRssi)
                 {
-                    enabled=false;
+                    maxRssi = rssi;
+                    BluetoothDevice device = result.getDevice();
 
+                    txtBluetooth.setText(device.getName());
                 }
             }
-
-
         }
-        else
-        {
-            if(found)
-            {
-                scanner.stopScan(backgroundCallBack);
-            }
-        }
-    }
-
-
-
-    @Override
-    public void onClick(DialogInterface dialog, int which)
-    {
-            if(mBlueAdapter.isEnabled()) {
-                while (mBlueAdapter.getState() != BluetoothAdapter.STATE_ON) {
-                    try {
-                        Thread.sleep(600000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                scanner = mBlueAdapter.getBluetoothLeScanner();
-                scanner.startScan(backgroundCallBack);
-            }
-            else
-                Toast.makeText(this, "Unable to open Bluetooth...Please check your permission!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -277,4 +225,128 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /*
+
+	private ActivityResultLauncher<Intent> bluetoothEnabler;
+	private BluetoothAdapter bluetoothAdapter;
+	private BluetoothLeScanner bleScanner;
+	private BeaconCallback beaconCallback;
+	private ProgressBar pgbScan;
+	private TextView txtDetail;
+	private Button btnScan;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		bluetoothEnabler = registerForActivityResult(
+				new ActivityResultContracts.StartActivityForResult(), this::enable);
+		pgbScan = findViewById(R.id.pgbScan);
+		txtDetail = findViewById(R.id.txtDetail);
+		btnScan = findViewById(R.id.btnScan);
+
+		btnScan.setOnClickListener(this::scan);
+		registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+				this::request).launch(Manifest.permission.ACCESS_FINE_LOCATION);
+	}
+
+	private void request(boolean isGranted)
+	{
+		BluetoothManager bluetoothManager =
+				(BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+		bluetoothAdapter = bluetoothManager.getAdapter();
+		bleScanner = bluetoothAdapter.getBluetoothLeScanner();
+		beaconCallback = new BeaconCallback();
+
+		btnScan.setEnabled(true);
+	}
+
+	private void enable(ActivityResult activityResult)
+	{
+		if (activityResult.getResultCode() == RESULT_OK)
+			scan();
+	}
+
+	private void scan(View view)
+	{
+		pgbScan.setVisibility(View.VISIBLE);
+		btnScan.setEnabled(false);
+
+		if (!bluetoothAdapter.isEnabled())
+			bluetoothEnabler.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+		else
+			scan();
+	}
+
+	private void scan()
+	{
+		new Handler().postDelayed(this::stop, 30000);
+		bleScanner.startScan(beaconCallback);
+	}
+
+	private void stop()
+	{
+		Executors.newSingleThreadExecutor().execute(this::send);
+		bleScanner.stopScan(beaconCallback);
+		pgbScan.setVisibility(View.GONE);
+		btnScan.setEnabled(true);
+	}
+
+	private void send()
+	{
+		try
+		{
+			JSONObject request = new JSONObject();
+			HttpsURLConnection connection = (HttpsURLConnection) new URL(
+					"https://utemsmartparking.tk/api/v1/" + txtDetail.getText()
+							+ "/telemetry").openConnection();
+
+			request.put("user", "Satrya Fajri Pratama");
+
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Accept", "application/json");
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.getOutputStream().write(request.toString().getBytes());
+
+			if (connection.getResponseCode() == 200)
+				System.out.println("Success");
+			else
+				System.out.println("Fail");
+
+			connection.disconnect();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private class BeaconCallback extends ScanCallback
+	{
+		private int maxRssi = Integer.MIN_VALUE;
+
+		@Override
+		public void onScanResult(int callbackType, ScanResult result)
+		{
+			int rssi = result.getRssi();
+
+			synchronized (this)
+			{
+				if (rssi > maxRssi)
+				{
+					maxRssi = rssi;
+					BluetoothDevice device = result.getDevice();
+
+					txtDetail.setText(device.getName());
+				}
+			}
+		}
+	}
+     */
+
 }

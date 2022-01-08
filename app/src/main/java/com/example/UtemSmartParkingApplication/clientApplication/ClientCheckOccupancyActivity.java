@@ -80,7 +80,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
 
 
     BluetoothAdapter bluetoothAdapter;
-    private BackgroundCallBack backgroundCallBack;
+  //  private BackgroundCallBack backgroundCallBack;
     private boolean scanning;
     private Handler handler = new Handler();
     private LocationManager locationAdapter;
@@ -141,7 +141,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
             else
         {
             scanner= mBlueAdapter.getBluetoothLeScanner();
-            scanner.startScan(backgroundCallBack);
+            //scanner.startScan(backgroundCallBack);
         }
 /*
 
