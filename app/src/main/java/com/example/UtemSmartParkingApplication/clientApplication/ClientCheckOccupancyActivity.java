@@ -97,7 +97,7 @@ public class ClientCheckOccupancyActivity  extends AppCompatActivity {
 
         mStatusBlueTv = findViewById(R.id.status);
         mPairedTv = findViewById(R.id.paired);
-        listView = (ListView) findViewById(R.id.LotList);
+       // listView = (ListView) findViewById(R.id.LotList);
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
 

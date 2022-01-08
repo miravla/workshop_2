@@ -111,13 +111,12 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_LOCATION);
 
+
         }
 
-        else
-        {
             scanner= mBlueAdapter.getBluetoothLeScanner();
             scanner.startScan(backgroundCallBack);
-        }
+
 
 
        // backgroundCallBack=new BackgroundCallBack(this);
@@ -164,6 +163,7 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
         long time=System.currentTimeMillis();
 
         boolean found=false;
+
         if(record!=null)
         {
 
@@ -173,6 +173,9 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
             String name=result.getDevice().getName();
             int rssi=result.getRssi();
             Toast.makeText(this, "HIHIHIHI", Toast.LENGTH_SHORT).show();
+
+            txtBluetooth.setText(name);
+            /*
             ArrayList<String> list = new ArrayList<String>();
 
             for(int i=0;i>1000;i++) {
@@ -182,6 +185,8 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
 
             listView.setAdapter(arrayAdapter);
 
+
+ */
             if(data!=null&&data.length>16)
             {
 
