@@ -117,7 +117,7 @@ public class BluetoothScanActivity extends AppCompatActivity  {
             ActivityCompat.requestPermissions(BluetoothScanActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_LOCATION);
-            btnScan.setOnClickListener(this::scan);
+
 
         }
 
@@ -125,7 +125,7 @@ public class BluetoothScanActivity extends AppCompatActivity  {
         mBlueAdapter = btManager.getAdapter();
         scanner = mBlueAdapter.getBluetoothLeScanner();
         beaconCallback = new BeaconCallback();
-
+        btnScan.setOnClickListener(this::scan);
 
 
         }
