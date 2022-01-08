@@ -51,9 +51,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class BluetoothScanActivity extends AppCompatActivity  {
 
+
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static final int REQUEST_READ_PHONE_STATE = 1;
     private ActivityResultLauncher<Intent> bluetoothEnabler;
     TextView mStatusBlueTv, mPairedTv,txtBluetooth;
     private ProgressBar pgbScan;
@@ -61,7 +63,7 @@ public class BluetoothScanActivity extends AppCompatActivity  {
     private BluetoothAdapter mBlueAdapter=null;
     private BluetoothLeScanner scanner;
     private BeaconCallback beaconCallback;
-   Button btnScan;
+    Button btnScan;
 
     private void showToast(String hello) {
         Toast.makeText(this, hello, Toast.LENGTH_SHORT).show();
@@ -76,6 +78,7 @@ public class BluetoothScanActivity extends AppCompatActivity  {
         pgbScan = findViewById(R.id.pgbScan);
         txtBluetooth = findViewById(R.id.bluetooth);
         btnScan = findViewById(R.id.btnScan);
+
         super.onCreate(savedInstanceState2);
         setContentView(R.layout.parking_list);
 
@@ -85,8 +88,11 @@ public class BluetoothScanActivity extends AppCompatActivity  {
         // showing the back button in action bar
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        mBlueAdapter = BluetoothAdapter.getDefaultAdapter();
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        BluetoothManager btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+
+        // btnScan.setOnClickListener(this::scan);
+        mBlueAdapter = btManager.getAdapter();
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
         //check if bluetooth is available or not
@@ -99,14 +105,15 @@ public class BluetoothScanActivity extends AppCompatActivity  {
 
         if (!mBlueAdapter.isEnabled()) {
 
+
             //if bluetooth not open yet
             Toast.makeText(BluetoothScanActivity.this, "Turning on Bluetooth...",
                     Toast.LENGTH_SHORT).show();
 
             //intent to on BT
             //open bluetooth
-            bluetoothEnabler = registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(), this::enable);
+            //bluetoothEnabler = registerForActivityResult(
+                   // new ActivityResultContracts.StartActivityForResult(), this::enable);
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, REQUEST_ENABLE_BT);
 
@@ -119,25 +126,47 @@ public class BluetoothScanActivity extends AppCompatActivity  {
                     MY_PERMISSIONS_REQUEST_LOCATION);
 
 
+
         }
 
-        final BluetoothManager btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+
+        scanner = mBlueAdapter.getBluetoothLeScanner();
+        beaconCallback = new BeaconCallback();
+
+
+        scan();
+        }
+
+    private void request(boolean isGranted) {
+        BluetoothManager btManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+
+       // bluetoothEnabler = registerForActivityResult(
+             //   new ActivityResultContracts.StartActivityForResult(), this::enable);
+        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivityForResult(intent, REQUEST_ENABLE_BT);
+
+        showToast("Making your device discoverable");
+        Intent intent2 = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        startActivityForResult(intent2, REQUEST_DISCOVER_BT);
+
+        ActivityCompat.requestPermissions(BluetoothScanActivity.this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                MY_PERMISSIONS_REQUEST_LOCATION);
+
         mBlueAdapter = btManager.getAdapter();
         scanner = mBlueAdapter.getBluetoothLeScanner();
         beaconCallback = new BeaconCallback();
-        btnScan.setOnClickListener(this::scan);
+       // btnScan.setEnabled(true);
+        scan();
 
-
-        }
-
-
+    }
 
     private void enable(ActivityResult activityResult)
     {
         if (activityResult.getResultCode() == RESULT_OK)
             scan();
     }
-
+/*
     private void scan(View view)
     {
 
@@ -147,6 +176,8 @@ public class BluetoothScanActivity extends AppCompatActivity  {
         else
             scan();
     }
+
+ */
 
     private void scan()
     {
@@ -158,7 +189,7 @@ public class BluetoothScanActivity extends AppCompatActivity  {
     {
         Executors.newSingleThreadExecutor().execute(this::send);
         scanner.stopScan(beaconCallback);
-        pgbScan.setVisibility(View.GONE);
+     //   pgbScan.setVisibility(View.GONE);
 
     }
 
@@ -197,11 +228,15 @@ public class BluetoothScanActivity extends AppCompatActivity  {
 
     private class BeaconCallback extends ScanCallback
     {
+
+
         private int maxRssi = Integer.MIN_VALUE;
 
         @Override
         public void onScanResult(int callbackType, ScanResult result)
         {
+            super.onScanResult(callbackType, result);
+            Toast.makeText(BluetoothScanActivity.this, "BABI", Toast.LENGTH_SHORT).show();
             int rssi = result.getRssi();
 
             synchronized (this)
