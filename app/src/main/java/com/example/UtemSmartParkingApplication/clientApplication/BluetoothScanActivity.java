@@ -119,6 +119,7 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
 
 
 
+
        // backgroundCallBack=new BackgroundCallBack(this);
        // Intent intent=getIntent();
         //  bluetooth=new JSONObject(Objects.requireNonNull(intent.getStringExtra("bluetooth")));
@@ -148,16 +149,10 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
 
         }
 
-    /*@Override
-    public void onRequestPermissionResult(int requestCode, @NonNull String[]permission, @NonNull int[]grantResult)
-    {
 
-    }
 
-     */
 
-    void setScanResult(ScanResult result)
-    {
+    void setScanResult(ScanResult result) throws JSONException {
 
         ScanRecord record=result.getScanRecord();
         long time=System.currentTimeMillis();
@@ -172,9 +167,12 @@ public class BluetoothScanActivity extends AppCompatActivity implements View.OnC
             //String UUID=new String(data);
             String name=result.getDevice().getName();
             int rssi=result.getRssi();
+            UUID uuid=UUID.fromString(bluetooth.getJSONObject("originator").getString("id"));
             Toast.makeText(this, "HIHIHIHI", Toast.LENGTH_SHORT).show();
 
             txtBluetooth.setText(name);
+
+            //Todo: compare rssi signal
             /*
             ArrayList<String> list = new ArrayList<String>();
 

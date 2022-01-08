@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 token = response.getString("token");
             }
 
+
             connection.disconnect();
 
             if (token != null) {
