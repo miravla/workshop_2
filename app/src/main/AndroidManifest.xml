@@ -36,9 +36,6 @@
             android:name=".clientApplication.ClientProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".clientApplication.ClientCheckOccupancyActivity"
-            android:exported="false" />
-        <activity
             android:name=".clientApplication.BluetoothScanActivity"
             android:exported="false" />
 

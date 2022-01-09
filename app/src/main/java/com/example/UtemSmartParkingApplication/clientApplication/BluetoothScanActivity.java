@@ -69,7 +69,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
         mStatusBlueTv = findViewById(R.id.status);
-        mPairedTv = findViewById(R.id.paired);
+
         pgbScan = findViewById(R.id.pgbScan);
         txtBluetooth = findViewById(R.id.bluetooth);
         btnScan = findViewById(R.id.btnScan);
@@ -165,7 +165,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
                 if (rssi > maxRssi) {
                     maxRssi = rssi;
                     BluetoothDevice device = result.getDevice();
-                    Toast.makeText(BluetoothScanActivity.this, "HAHA" + device.getName(), Toast.LENGTH_SHORT).show();
+                    mPairedTv.setText("Devices detected :");
                     txtBluetooth.setText(device.getName());
                 }
             }
