@@ -234,9 +234,9 @@ public class BluetoothScanActivity extends AppCompatActivity  {
         public void onScanResult(int callbackType, ScanResult result)
         {
             super.onScanResult(callbackType, result);
-            Toast.makeText(BluetoothScanActivity.this, result.getDevice().getName(), Toast.LENGTH_SHORT).show();
+
             int rssi = result.getRssi();
-            String lalal=result.getScanRecord().getDeviceName();
+
             synchronized (this)
             {
                 if (rssi > maxRssi)
@@ -244,9 +244,10 @@ public class BluetoothScanActivity extends AppCompatActivity  {
                     maxRssi = rssi;
 
                     BluetoothDevice device = result.getDevice();
-                    Toast.makeText(BluetoothScanActivity.this, "HAHA"+device.getName(), Toast.LENGTH_SHORT).show();
 
-                    txtBluetooth.setText(lalal);
+
+                    txtBluetooth.setText(device.getName());
+                    Toast.makeText(BluetoothScanActivity.this, "HAHA", Toast.LENGTH_SHORT).show();
                 }
             }
         }
