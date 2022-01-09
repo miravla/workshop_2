@@ -24,11 +24,13 @@ public class ClientHomeActivity extends AppCompatActivity {
             Intent intent = new Intent(ClientHomeActivity.this, BluetoothScanActivity.class);
             startActivity(intent);
         });
+
         ImageView profile = findViewById(R.id.profileImage);
         profile.setOnClickListener(v -> {
             Intent intent = new Intent(ClientHomeActivity.this, ClientProfileActivity.class);
             startActivity(intent);
         });
+
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
 
