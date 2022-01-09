@@ -63,18 +63,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         loaderManager.destroyLoader(loader.getId());
 
-        if(data != null)
-        {
+        if (data != null) {
             Intent intent = null;
+            System.out.println(data);
             String token = data.getString("token", null);
 
-            if(token != null)
+            if (token != null) {
+                Toast.makeText(MainActivity.this, "login Success",
+                        Toast.LENGTH_SHORT).show();
                 intent = new Intent(MainActivity.this, ClientHomeActivity.class);
+                intent.putExtra("token", token);
+            }
             else
                 Toast.makeText(MainActivity.this, "Username/password is incorrect",
                         Toast.LENGTH_SHORT).show();
 
-            intent.putExtra("token", token);
+
             startActivity(intent);
         }
     }
@@ -117,15 +121,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 //loginProgress.setVisibility(View.INVISIBLE);
             }
         })*/
-        ;
+
     }
 
-    public void login(View view)
-    {
-        loaderManager.initLoader(1,null,this);
+    public void login(View view) {
+        loaderManager.initLoader(1, null, this);
     }
-
-    private void process() {
+}
+   /* private void process() {
         if (responsecode == 200) {
             Intent intent = new Intent(MainActivity.this, ClientHomeActivity.class);
             startActivity(intent);
@@ -134,12 +137,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     Toast.LENGTH_SHORT).show();
                    /* intent = new Intent(MainActivity.this, ClientHomeActivity.class);
                     startActivity(intent);*/
-        }
+
 
 
 
                 /*Toast.makeText(MainActivity.this, "Not A Valid Account!",
-                            Toast.LENGTH_SHORT).show();*/
+                            Toast.LENGTH_SHORT).show();
         txtEmail.setEnabled(true);
         txtPassword.setEnabled(true);
     }
@@ -204,4 +207,4 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
 
-}
+}*/

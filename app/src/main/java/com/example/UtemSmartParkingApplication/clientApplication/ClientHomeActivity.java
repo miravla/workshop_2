@@ -14,14 +14,28 @@ import com.example.UtemSmartParkingApplication.R;
 
 public class ClientHomeActivity extends AppCompatActivity {
 
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
         super.onCreate(savedInstanceState2);
         setContentView(R.layout.client_home);
+
+        if (savedInstanceState2 == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                token = null;
+            } else {
+                token = extras.getString("token");
+            }
+        } else {
+            token = (String) savedInstanceState2.getSerializable("token");
+        }
+
         ImageView check = findViewById(R.id.CheckImage);
         check.setOnClickListener(v -> {
             Intent intent = new Intent(ClientHomeActivity.this, BluetoothScanActivity.class);
+            intent.putExtra("token", token);
             startActivity(intent);
         });
 

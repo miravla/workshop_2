@@ -31,12 +31,16 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
+import com.example.UtemSmartParkingApplication.MainActivity;
 import com.example.UtemSmartParkingApplication.R;
 
 import org.json.JSONObject;
@@ -60,15 +64,28 @@ public class BluetoothScanActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> bluetoothEnabler;
     TextView  mPairedTv, txtBluetooth;
     private ProgressBar pgbScan;
-
+    private LoaderManager loaderManager;
     private BluetoothAdapter mBlueAdapter;
     private BluetoothLeScanner scanner;
     private BeaconCallback beaconCallback;
+    private String token;
     Button btnScan;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
+
+        if (savedInstanceState2 == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                token = null;
+            } else {
+                token = extras.getString("token");
+            }
+        } else {
+            token = (String) savedInstanceState2.getSerializable("token");
+        }
+
         mPairedTv = findViewById(R.id.status);
 
         pgbScan = findViewById(R.id.pgbScan);
@@ -144,7 +161,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
                     "https://utemsmartparking.tk/api/v1/" + sub
                             + "/telemetry").openConnection();
 
-            request.put("user", "Satrya Fajri Pratama");
+            request.put("Token", token);
 
             connection.setDoInput(true);
             connection.setDoOutput(true);
