@@ -92,17 +92,7 @@ public class BluetoothScanActivity extends AppCompatActivity  {
         mBlueAdapter = btManager.getAdapter();
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-
-        //check if bluetooth is available or not
-        if (mBlueAdapter == null) {
-            // mStatusBlueTv.setText("Bluetooth is not available");
-            Toast.makeText(BluetoothScanActivity.this, "Bluetooth is not available",
-                    Toast.LENGTH_SHORT).show();
-        }
-
-
         if (!mBlueAdapter.isEnabled()) {
-
 
             //if bluetooth not open yet
             Toast.makeText(BluetoothScanActivity.this, "Turning on Bluetooth...",
@@ -123,15 +113,12 @@ public class BluetoothScanActivity extends AppCompatActivity  {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_LOCATION);
 
-
-
+            mBlueAdapter = btManager.getAdapter();
         }
 
 
         scanner = mBlueAdapter.getBluetoothLeScanner();
         beaconCallback = new BeaconCallback();
-
-
         scan();
         }
 
