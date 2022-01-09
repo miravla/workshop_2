@@ -33,6 +33,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -149,9 +150,24 @@ public class BluetoothScanActivity extends AppCompatActivity {
             connection.getOutputStream().write(request.toString().getBytes());
 
             if (connection.getResponseCode() == 200)
-                System.out.println("Success");
+            {
+                AlertDialog alertDialog = new AlertDialog.Builder(BluetoothScanActivity.this).create();
+                alertDialog.setTitle("Notification");
+                alertDialog.setMessage("Your car is successfully registered in the system!");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        (dialog, which) -> dialog.dismiss());
+                alertDialog.show();
+            }
+
             else
-                System.out.println("Fail");
+            {
+                AlertDialog alertDialog = new AlertDialog.Builder(BluetoothScanActivity.this).create();
+                alertDialog.setTitle("Notification");
+                alertDialog.setMessage("Registered failed! Please contact our officer for help!");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                        (dialog, which) -> dialog.dismiss());
+                alertDialog.show();
+            }
 
             connection.disconnect();
         } catch (Exception e) {
