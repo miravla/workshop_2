@@ -149,6 +149,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
         btnScan.setEnabled(true);
     }
 
+    @SuppressLint("SetTextI18n")
     private void send() {
         try {
             //get token name from device
@@ -182,6 +183,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
                 alertDialog.show();
 
                 //Successfully sent to thingsboard
+                mPairedTv.setText("Currently parked at");
                 btnScan.setEnabled(false);
             }
 
@@ -230,7 +232,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
                     }
                 }
                 else
-                    mPairedTv.setText("NO ESP 32 device is arround ");
+                    mPairedTv.setText("NO ESP 32 device is around ");
 
         }
     }
