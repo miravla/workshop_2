@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -209,18 +210,27 @@ public class BluetoothScanActivity extends AppCompatActivity {
         public void onScanResult(int callbackType, ScanResult result) {
 
                 int rssi = result.getRssi();
+                byte[]data=result.getScanRecord().getManufacturerSpecificData(76);
+                if(data!=null) {
+                    synchronized (this) {
+                        try {
+                            if (rssi > maxRssi) {
+                                maxRssi = rssi;
+                                BluetoothDevice device = result.getDevice();
 
-                synchronized (this) {
-                    if (rssi > maxRssi) {
-                        maxRssi = rssi;
-                        BluetoothDevice device = result.getDevice();
+                                mPairedTv.setText("Devices detected :");
 
-                        mPairedTv.setText("Devices detected :");
+                                txtBluetooth.setText(device.getName());
 
-                        txtBluetooth.setText(device.getName());
+                            }
+                        } catch (Exception e) {
 
+                            mPairedTv.setText("NO device is detected ");
+                        }
                     }
                 }
+                else
+                    mPairedTv.setText("NO ESP 32 device is arround ");
 
         }
     }
