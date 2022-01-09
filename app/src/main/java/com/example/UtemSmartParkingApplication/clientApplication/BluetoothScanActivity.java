@@ -231,8 +231,6 @@ public class BluetoothScanActivity extends AppCompatActivity  {
                     maxRssi = rssi;
 
                     BluetoothDevice device = result.getDevice();
-
-
                     txtBluetooth.setText(device.getName());
                     Toast.makeText(BluetoothScanActivity.this, "HAHA", Toast.LENGTH_SHORT).show();
                 }
