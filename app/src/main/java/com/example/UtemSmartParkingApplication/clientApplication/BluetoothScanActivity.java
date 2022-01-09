@@ -157,6 +157,9 @@ public class BluetoothScanActivity extends AppCompatActivity {
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                         (dialog, which) -> dialog.dismiss());
                 alertDialog.show();
+
+                //Successfully sent to thingsboard
+                btnScan.setEnabled(false);
             }
 
             else
