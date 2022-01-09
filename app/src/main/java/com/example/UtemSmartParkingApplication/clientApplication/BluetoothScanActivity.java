@@ -76,6 +76,9 @@ public class BluetoothScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
 
+        super.onCreate(savedInstanceState2);
+        setContentView(R.layout.parking_list);
+
         if (savedInstanceState2 == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -93,8 +96,6 @@ public class BluetoothScanActivity extends AppCompatActivity {
         txtBluetooth = findViewById(R.id.bluetooth);
         btnScan = findViewById(R.id.btnScan);
 
-        super.onCreate(savedInstanceState2);
-        setContentView(R.layout.parking_list);
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
 
