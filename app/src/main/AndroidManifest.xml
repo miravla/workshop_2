@@ -40,9 +40,6 @@
             android:exported="false" />
 
         <activity
-            android:name=".parking_list"
-            android:exported="false" />
-        <activity
             android:name="com.example.UtemSmartParkingApplication.MainActivity"
             android:exported="true">
 

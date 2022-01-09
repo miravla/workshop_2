@@ -57,7 +57,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final int REQUEST_READ_PHONE_STATE = 1;
     private ActivityResultLauncher<Intent> bluetoothEnabler;
-    TextView mStatusBlueTv, mPairedTv, txtBluetooth;
+    TextView  mPairedTv, txtBluetooth;
     private ProgressBar pgbScan;
 
     private BluetoothAdapter mBlueAdapter;
@@ -68,7 +68,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState2) {
-        mStatusBlueTv = findViewById(R.id.status);
+        mPairedTv = findViewById(R.id.status);
 
         pgbScan = findViewById(R.id.pgbScan);
         txtBluetooth = findViewById(R.id.bluetooth);
@@ -76,7 +76,11 @@ public class BluetoothScanActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState2);
         setContentView(R.layout.parking_list);
+        // calling the action bar
+        ActionBar actionBar = getSupportActionBar();
 
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         bluetoothEnabler = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), this::enable);
@@ -128,9 +132,11 @@ public class BluetoothScanActivity extends AppCompatActivity {
 
     private void send() {
         try {
+            String esp= txtBluetooth.getText().toString();
+            String sub = esp.substring(6);
             JSONObject request = new JSONObject();
             HttpsURLConnection connection = (HttpsURLConnection) new URL(
-                    "https://utemsmartparking.tk/api/v1/" + txtBluetooth.getText()
+                    "https://utemsmartparking.tk/api/v1/" + sub
                             + "/telemetry").openConnection();
 
             request.put("user", "Satrya Fajri Pratama");
@@ -156,23 +162,36 @@ public class BluetoothScanActivity extends AppCompatActivity {
     private class BeaconCallback extends ScanCallback {
         private int maxRssi = Integer.MIN_VALUE;
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
 
-            int rssi = result.getRssi();
+                int rssi = result.getRssi();
 
-            synchronized (this) {
-                if (rssi > maxRssi) {
-                    maxRssi = rssi;
-                    BluetoothDevice device = result.getDevice();
-                    mPairedTv.setText("Devices detected :");
-                    txtBluetooth.setText(device.getName());
+                synchronized (this) {
+                    if (rssi > maxRssi) {
+                        maxRssi = rssi;
+                        BluetoothDevice device = result.getDevice();
+
+                        mPairedTv.setText("Devices detected :");
+
+                        txtBluetooth.setText(device.getName());
+
+                    }
                 }
-            }
+
         }
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 
