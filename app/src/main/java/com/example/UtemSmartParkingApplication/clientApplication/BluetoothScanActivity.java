@@ -105,47 +105,83 @@ public class BluetoothScanActivity extends AppCompatActivity {
 
 
         btnScan.setOnClickListener(this::bluetoothScan);
+
+        //add permission
         registerForActivityResult(new ActivityResultContracts.RequestPermission(),
                 this::bluetoothRequest).launch(Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
     private void bluetoothRequest(boolean isGranted) {
+
+        //get bluetooth service
         BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
 
+        //get bluetooth adapter
         mBlueAdapter = bluetoothManager.getAdapter();
+
+        //get bluetooth scanner
         scanner = mBlueAdapter.getBluetoothLeScanner();
+
+        //callback for the scan result
         beaconCallback = new BeaconCallback();
+
 
         btnScan.setEnabled(true);
     }
 
     private void bluetoothResult(ActivityResult activityResult) {
+        //if bluetooth is open
         if (activityResult.getResultCode() == RESULT_OK)
+
+            //start scan
             bluetoothScan();
     }
 
     private void bluetoothScan(View view) {
+        //scanning progress bar visible
         pgbScan.setVisibility(View.VISIBLE);
         btnScan.setEnabled(true);
 
+        //if no adapter
         if (!mBlueAdapter.isEnabled()) {
-            Toast.makeText(this, "BLuetooth must be opened to scan the device!", Toast.LENGTH_SHORT).show();
+
+            //show message
+            Toast.makeText(this, "Bluetooth must be opened to scan the device!", Toast.LENGTH_SHORT).show();
+
+            //get permission again
             bluetoothLauncher.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
         }
         else
+
+            //if adapter get
+        //start the scanning
             bluetoothScan();
     }
 
     private void bluetoothScan() {
+
+       //scanning process
+
+        //stop the scanning if the time passed 30 seconds ady
         new Handler().postDelayed(this::stopScan, 30000);
         scanner.startScan(beaconCallback);
     }
 
     private void stopScan() {
+
+        //send data to thingsboard
         Executors.newSingleThreadExecutor().execute(this::sendThingsboard);
+
+        //after sending data
+        //stop the scanning process
         scanner.stopScan(beaconCallback);
+
+        //process stop
+        //progress bar stop
         pgbScan.setVisibility(View.GONE);
+
+        //to enable user to scan again
         btnScan.setEnabled(true);
     }
 
@@ -172,6 +208,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.getOutputStream().write(request.toString().getBytes());
 
+            //if successfully send
             if (connection.getResponseCode() == 200)
             {
                 //show dialog
@@ -187,6 +224,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
                 btnScan.setEnabled(false);
             }
 
+            //if not send
             else
             {
                 //show dialog
@@ -205,39 +243,59 @@ public class BluetoothScanActivity extends AppCompatActivity {
     }
 
     private class BeaconCallback extends ScanCallback {
+
+
         private int maxRssi = Integer.MIN_VALUE;
 
         @SuppressLint("SetTextI18n")
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
 
+                //get the rssi value from device scan
                 int rssi = result.getRssi();
+
+                //detect whether the device is ESP 32 or not
                 byte[]data=result.getScanRecord().getManufacturerSpecificData(76);
+
+                //if it is ESP 32
                 if(data!=null) {
+
                     synchronized (this) {
                         try {
+
+                            //get the strongest rssi value
                             if (rssi > maxRssi) {
                                 maxRssi = rssi;
+
+                                //get device
                                 BluetoothDevice device = result.getDevice();
 
+                                //set text field
                                 mPairedTv.setText("Devices detected :");
 
+                                //get device name
                                 txtBluetooth.setText(device.getName());
 
                             }
                         } catch (Exception e) {
 
+                            //no device is detected
                             mPairedTv.setText("NO device is detected ");
                         }
                     }
                 }
                 else
+                    //not a ESP 32 device
                     mPairedTv.setText("NO ESP 32 device is around ");
 
         }
         @Override
         public void onScanFailed(int errorCode) {
+
+            //scan failed
             super.onScanFailed(errorCode);
+
+            //send error message and code
             Toast.makeText(BluetoothScanActivity.this, "Scan failed with error: " + errorCode, Toast.LENGTH_SHORT).show();
 
 
