@@ -62,10 +62,9 @@ public class BluetoothScanActivity extends AppCompatActivity {
     private static final int REQUEST_DISCOVER_BT = 1;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final int REQUEST_READ_PHONE_STATE = 1;
-    private ActivityResultLauncher<Intent> bluetoothEnabler;
+    private ActivityResultLauncher<Intent> bluetoothLauncher;
     TextView  mPairedTv, txtBluetooth;
     private ProgressBar pgbScan;
-    private LoaderManager loaderManager;
     private BluetoothAdapter mBlueAdapter;
     private BluetoothLeScanner scanner;
     private BeaconCallback beaconCallback;
@@ -91,7 +90,6 @@ public class BluetoothScanActivity extends AppCompatActivity {
         }
 
         mPairedTv = findViewById(R.id.status);
-
         pgbScan = findViewById(R.id.pgbScan);
         txtBluetooth = findViewById(R.id.bluetooth);
         btnScan = findViewById(R.id.btnScan);
@@ -102,20 +100,19 @@ public class BluetoothScanActivity extends AppCompatActivity {
         // showing the back button in action bar
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        bluetoothEnabler = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), this::enable);
-        pgbScan = findViewById(R.id.pgbScan);
-        txtBluetooth = findViewById(R.id.bluetooth);
-        btnScan = findViewById(R.id.btnScan);
+        bluetoothLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), this::bluetoothResult);
 
-        btnScan.setOnClickListener(this::scan);
+
+        btnScan.setOnClickListener(this::bluetoothScan);
         registerForActivityResult(new ActivityResultContracts.RequestPermission(),
-                this::request).launch(Manifest.permission.ACCESS_FINE_LOCATION);
+                this::bluetoothRequest).launch(Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
-    private void request(boolean isGranted) {
+    private void bluetoothRequest(boolean isGranted) {
         BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+
         mBlueAdapter = bluetoothManager.getAdapter();
         scanner = mBlueAdapter.getBluetoothLeScanner();
         beaconCallback = new BeaconCallback();
@@ -123,35 +120,37 @@ public class BluetoothScanActivity extends AppCompatActivity {
         btnScan.setEnabled(true);
     }
 
-    private void enable(ActivityResult activityResult) {
+    private void bluetoothResult(ActivityResult activityResult) {
         if (activityResult.getResultCode() == RESULT_OK)
-            scan();
+            bluetoothScan();
     }
 
-    private void scan(View view) {
+    private void bluetoothScan(View view) {
         pgbScan.setVisibility(View.VISIBLE);
         btnScan.setEnabled(true);
 
-        if (!mBlueAdapter.isEnabled())
-            bluetoothEnabler.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+        if (!mBlueAdapter.isEnabled()) {
+            Toast.makeText(this, "BLuetooth must be opened to scan the device!", Toast.LENGTH_SHORT).show();
+            bluetoothLauncher.launch(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+        }
         else
-            scan();
+            bluetoothScan();
     }
 
-    private void scan() {
-        new Handler().postDelayed(this::stop, 30000);
+    private void bluetoothScan() {
+        new Handler().postDelayed(this::stopScan, 30000);
         scanner.startScan(beaconCallback);
     }
 
-    private void stop() {
-        Executors.newSingleThreadExecutor().execute(this::send);
+    private void stopScan() {
+        Executors.newSingleThreadExecutor().execute(this::sendThingsboard);
         scanner.stopScan(beaconCallback);
         pgbScan.setVisibility(View.GONE);
         btnScan.setEnabled(true);
     }
 
     @SuppressLint("SetTextI18n")
-    private void send() {
+    private void sendThingsboard() {
         try {
             //get token name from device
             String esp= txtBluetooth.getText().toString();
@@ -236,7 +235,15 @@ public class BluetoothScanActivity extends AppCompatActivity {
                     mPairedTv.setText("NO ESP 32 device is around ");
 
         }
+        @Override
+        public void onScanFailed(int errorCode) {
+            super.onScanFailed(errorCode);
+            Toast.makeText(BluetoothScanActivity.this, "Scan failed with error: " + errorCode, Toast.LENGTH_SHORT).show();
+
+
+        }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
