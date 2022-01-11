@@ -207,7 +207,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Type", "application/json");
             connection.getOutputStream().write(request.toString().getBytes());
-
+            Toast.makeText(this, connection.getResponseCode(), Toast.LENGTH_SHORT).show();
             //if successfully send
             if (connection.getResponseCode() == 200)
             {
