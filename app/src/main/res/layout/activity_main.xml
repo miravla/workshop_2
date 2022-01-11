@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="349dp"
+        android:layout_width="293dp"
         android:layout_height="124dp"
         android:fontFamily="@font/alegreya_sans_sc_medium_italic"
 
@@ -16,11 +16,13 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.728"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintHorizontal_bias="0.847"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.382" />
+        app:layout_constraintVertical_bias="0.349"
+        app:layout_constraintWidth_percent="0.5" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="409dp"

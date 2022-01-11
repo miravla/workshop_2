@@ -199,7 +199,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
                     "https://utemsmartparking.tk/api/v1/" + sub
                             + "/telemetry").openConnection();
 
-            request.put("Token", token);
+            request.put("token", token);
 
             connection.setDoInput(true);
             connection.setDoOutput(true);
