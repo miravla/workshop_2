@@ -251,6 +251,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
 
+            try {
                 //get the rssi value from device scan
                 int rssi = result.getRssi();
 
@@ -285,12 +286,18 @@ public class BluetoothScanActivity extends AppCompatActivity {
                 else
                 {
                     //not a ESP 32 device
+                    txtBluetooth.setText(" ");
                     mPairedTv.setText("NO ESP 32 device is around ");
                 }
             }
+         catch (Exception e) {
 
+            //no device is detected
+             txtBluetooth.setText(" ");
+            mPairedTv.setText("NO device is detected ");
+        }
 
-
+        }
         @Override
         public void onScanFailed(int errorCode) {
 
