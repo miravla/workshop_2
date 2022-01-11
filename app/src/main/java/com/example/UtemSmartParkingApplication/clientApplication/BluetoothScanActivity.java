@@ -255,37 +255,35 @@ public class BluetoothScanActivity extends AppCompatActivity {
                 //get the rssi value from device scan
                 int rssi = result.getRssi();
 
-                //detect whether the device is ESP 32 or not
-                byte[] data = result.getScanRecord().getManufacturerSpecificData(76);
-
-                //if it is ESP 32
-                if (data != null)
-                {
-
                     synchronized (this) {
 
+                        //detect whether the device is ESP 32 or not
+                        byte[] data = result.getScanRecord().getManufacturerSpecificData(76);
 
-                        //get the strongest rssi value
-                        if (rssi > maxRssi) {
-                            maxRssi = rssi;
+                        //if it is ESP 32
+                        if (data != null) {
 
-                            //get device
-                            BluetoothDevice device = result.getDevice();
 
-                            //get device name
-                            txtBluetooth.setText(device.getName());
+                            //get the strongest rssi value
+                            if (rssi > maxRssi) {
+                                maxRssi = rssi;
 
-                            //set text field
-                            mPairedTv.setText("Devices detected :");
+                                //get device
+                                BluetoothDevice device = result.getDevice();
 
-                        }
+                                //get device name
+                                txtBluetooth.setText(device.getName());
 
+                                //set text field
+                                mPairedTv.setText("Devices detected :");
+
+                            }
+
+                        } else
+
+                            //not a ESP 32 device
+                            mPairedTv.setText("NO ESP 32 device is around ");
                     }
-                }
-                else
-
-                    //not a ESP 32 device
-                    mPairedTv.setText("NO ESP 32 device is around ");
             }
          catch (Exception e) {
 
