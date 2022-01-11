@@ -272,11 +272,11 @@ public class BluetoothScanActivity extends AppCompatActivity {
                             //get device
                             BluetoothDevice device = result.getDevice();
 
-                            //set text field
-                            mPairedTv.setText("Devices detected :");
-
                             //get device name
                             txtBluetooth.setText(device.getName());
+
+                            //set text field
+                            mPairedTv.setText("Devices detected :");
 
                         }
 
