@@ -204,9 +204,6 @@ public class BluetoothScanActivity extends AppCompatActivity {
             connection.setDoInput(true);
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
-
-            Toast.makeText(this, "connected to thingsboard", Toast.LENGTH_SHORT).show();
-
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Type", "application/json");
             connection.getOutputStream().write(request.toString().getBytes());
