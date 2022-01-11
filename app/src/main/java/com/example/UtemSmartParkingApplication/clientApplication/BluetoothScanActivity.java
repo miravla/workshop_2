@@ -173,6 +173,19 @@ public class BluetoothScanActivity extends AppCompatActivity {
         //send data to thingsboard
         Executors.newSingleThreadExecutor().execute(this::sendThingsboard);
 
+        //move to stop scan
+        //show dialog
+        AlertDialog alertDialog = new AlertDialog.Builder(BluetoothScanActivity.this).create();
+        alertDialog.setTitle("Notification");
+        alertDialog.setMessage("Your car is successfully registered in the system!");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                (dialog, which) -> dialog.dismiss());
+        alertDialog.show();
+
+        //Successfully sent to thingsboard
+        mPairedTv.setText("Currently parked at");
+        btnScan.setEnabled(false);
+
         //after sending data
         //stop the scanning process
         scanner.stopScan(beaconCallback);
